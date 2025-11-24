@@ -8,8 +8,6 @@
 
 ## Overview
 
-![HyperDjangoKit Logo](src/static/images/hyper-django-kit-logo.png)
-
 > **Video Walkthrough**: [Watch the 3-Minute Demo](https://www.youtube.com/watch?v=S-SM2AVInTA)
 
 HyperDjangoKit is a production-ready Django starter kit that combines SaaS subscriptions with e-commerce functionality. Built for developers who want to skip the 100+ hours of boilerplate setup and focus on building their unique features.
