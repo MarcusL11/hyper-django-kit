@@ -1,0 +1,50 @@
+<!-- Product Image Carousel Component -->
+<div class="flex gap-4">
+  <!-- Thumbnail Images (Left) -->
+  <div class="flex flex-col gap-2 w-20">
+    {% for image in product.images %}
+    <a href="#slide{{ forloop.counter }}"
+       class="border-2 border-base-300 rounded-lg overflow-hidden hover:border-primary transition-colors {% if forloop.first %}border-primary{% endif %}">
+      <img src="{{ image }}"
+           alt="Thumbnail {{ forloop.counter }}"
+           class="w-full h-20 object-cover" />
+    </a>
+    {% endfor %}
+  </div>
+
+  <!-- Main Carousel (Right) -->
+  <div class="flex-1 relative">
+    <!-- Carousel Container -->
+    <div class="carousel w-full rounded-lg shadow-lg">
+      {% for image in product.images %}
+      <div id="slide{{ forloop.counter }}" class="carousel-item relative w-full">
+        <img src="{{ image }}"
+             alt="{{ product.name }} - Image {{ forloop.counter }}"
+             class="w-full aspect-square object-cover" />
+
+        <!-- Navigation Arrows -->
+        <div class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
+          {% if forloop.first %}
+            <a href="#slide{{ product.images|length }}" class="btn btn-circle btn-sm">❮</a>
+          {% else %}
+            <a href="#slide{{ forloop.counter|add:'-1' }}" class="btn btn-circle btn-sm">❮</a>
+          {% endif %}
+
+          {% if forloop.last %}
+            <a href="#slide1" class="btn btn-circle btn-sm">❯</a>
+          {% else %}
+            <a href="#slide{{ forloop.counter|add:'1' }}" class="btn btn-circle btn-sm">❯</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Indicator Dots -->
+    <div class="flex w-full justify-center gap-2 py-4">
+      {% for image in product.images %}
+      <a href="#slide{{ forloop.counter }}" class="btn btn-xs">{{ forloop.counter }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</div>

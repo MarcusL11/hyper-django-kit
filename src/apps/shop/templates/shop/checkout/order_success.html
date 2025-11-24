@@ -1,0 +1,17 @@
+{% extends 'shop/base_product_list.html' %}
+{% load cotton %}
+
+{% block title_content %}Order Successful - BookIDs{% endblock title_content %}
+
+{% block content %}
+  <c-result-card
+    result_type="success"
+    heading="Purchase Successful!"
+    message="Thank you for your purchase!"
+    submessage="Your order has been confirmed and you will receive an email shortly."
+    primary_url="{% url 'user_dashboard:index' %}"
+    primary_text="Go to Dashboard"
+    secondary_url="{% url 'shop:product_list' %}"
+    secondary_text="Continue Shopping"
+  />
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% load static tailwind_tags %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>HyperDjangoKit - {% block title %}{% endblock %}</title>
+    <meta charset="UTF-8" />
+    <meta name="author" content="HyperDjangoKit" />
+    <meta name="keywords" content="Django, SaaS, starter kit, HATEOAS, Python, web development" />
+    <meta name="description" content="From Idea to Deployment, Skip the 100-Hour Setup. The complete Django SaaS starter kit built for speed and long-term maintainability." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {# Favicons #}
+    <link rel="shortcut icon" href="{% static 'images/favicon-dark.png' %}" media="(prefers-color-scheme: dark)" />
+    <link rel="shortcut icon" href="{% static 'images/favicon-light.png' %}" media="(prefers-color-scheme: light)" />
+
+    {# Google Fonts - Space Mono & Space Grotesk #}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    {# Main CSS #}
+    {% tailwind_css %}
+    {# Custom CSS #}
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
+    {# Custom JS #}
+    <script src="{% static 'js/theme-controller.js' %}"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src={% static "cookie_consent/cookiebar.js" %}></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    {% block extra_head %}{% endblock %}
+  </head>
+
+  <body class="bg-base-100">
+    {% block content %}{% endblock content %}
+    <!-- Floating Announcement Banner -->
+    {% block extra_scripts %}{% endblock extra_scripts %}
+  </body>
+</html>

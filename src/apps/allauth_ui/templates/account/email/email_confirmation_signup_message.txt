@@ -1,0 +1,19 @@
+Welcome to {{ site_name }}!
+
+Hello!
+
+Thank you for signing up with {{ site_name }}. We're excited to have you on board!
+
+To complete your registration and start exploring our collection, please confirm your email address by visiting the following link:
+
+{{ activate_url }}
+
+This link will expire in 24 hours for security reasons.
+
+If you're having trouble clicking the link, copy and paste the URL into your web browser.
+
+If you didn't create an account with {{ site_name }}, you can safely ignore this email.
+
+---
+© {{ site_name }}. All rights reserved.
+This is an automated message, please do not reply to this email.

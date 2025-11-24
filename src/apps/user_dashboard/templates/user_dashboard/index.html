@@ -1,0 +1,25 @@
+{% extends 'user_dashboard/base.html' %}
+{% load static %}
+{% block content %}
+<div class="card card-border bg-base-300 rounded-box relative w-full overflow-hidden p-6 shrink-0">
+  <div class="flex justify-between">
+    <div>
+      <div class="flex items-center gap-1">
+        <a href="{% url 'user_dashboard:index'%}" class="hover:link text-base-content/80 text-sm">Dashboard</a>
+      </div>
+      <p class="text-primary mt-4 text-xl font-medium">
+        Dashboard
+      </p>
+      <p class="text-base-content/80">
+      The following are placeholder DaisyUI Components, you can customize this dashboard to display your own content!
+      </p>
+    </div>
+  </div>
+</div>  
+
+<!--  Start: Title -->
+  <div class="mt-2">
+  </div>
+{% endblock content %}
+{% block js_body %}
+{% endblock js_body %}

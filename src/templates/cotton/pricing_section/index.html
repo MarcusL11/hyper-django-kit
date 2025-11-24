@@ -1,0 +1,62 @@
+<c-vars
+  plans_monthly
+  plans_yearly
+  user_subscription
+  user_product_id
+/>
+
+<div id="subscription-price" data-signals="{interval: 'month'}" class="space-y-8">
+  <!-- Monthly/Yearly Toggle Switcher -->
+  <div class="flex justify-center my-12" style="gap: 2rem">
+    <span class="text-primary transition-all" data-class-font-bold="$interval === 'month'">Monthly</span>
+    <input
+      type="checkbox"
+      data-on:change="$interval = ($interval === 'month' ? 'year' : 'month')"
+      data-attr:checked="$interval === 'year'"
+      class="toggle border-primary bg-primary checked:border-secondary checked:bg-secondary text-secondary checked:text-primary"
+    />
+    <span class="text-secondary transition-all" data-class-font-bold="$interval === 'year'">Yearly</span>
+  </div>
+
+  <!-- Monthly Plans (visible by default) -->
+  <div data-show="$interval === 'month'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for plan in plans_monthly %}
+      <c-pricing-section.card
+        :plan="plan"
+        :is_popular="plan.metadata.is_popular"
+        :user_subscription="user_subscription"
+        :user_product_id="user_product_id"
+      />
+    {% empty %}
+      <div class="col-span-full">
+        <div class="alert alert-info">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>No monthly plans available at the moment.</span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Yearly Plans (hidden by default) -->
+  <div data-show="$interval === 'year'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for plan in plans_yearly %}
+      <c-pricing-section.card
+        :plan="plan"
+        :is_popular="plan.metadata.is_popular"
+        :user_subscription="user_subscription"
+        :user_product_id="user_product_id"
+      />
+    {% empty %}
+      <div class="col-span-full">
+        <div class="alert alert-info">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>No yearly plans available at the moment.</span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>

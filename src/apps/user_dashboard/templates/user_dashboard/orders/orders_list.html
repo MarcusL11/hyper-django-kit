@@ -1,0 +1,156 @@
+{% extends 'user_dashboard/base.html' %}
+{% load humanize pricing_filters partials %}
+
+{% block content %}
+    {# Header Section #}
+    <div class="card card-border bg-base-300 rounded-box relative w-full p-6 shrink-0">
+      <div class="flex justify-between">
+        <div>
+          <div class="flex items-center gap-1">
+            <a href="{% url 'user_dashboard:index'%}" class="hover:link text-base-content/80 text-sm">Dashboard</a>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-base-content/80 size-3.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+            <p class="text-sm">Orders</p>
+          </div>
+          <p class="text-primary mt-4 text-xl font-medium">
+            My Orders
+          </p>
+          <p class="text-base-content/80">
+            View and manage your shop orders and invoices.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {# Orders Table #}
+    {% if page_obj %}
+    <div class="card bg-base-200 card-border shadow-xl flex-1 flex flex-col min-h-0">
+      <div class="card-body grow-0 shrink-0">
+        <h2 class="card-title">Order History</h2>
+        <p class="text-sm text-base-content/70">View your purchase history and download invoices</p>
+      </div>
+      <div class="flex-1 overflow-auto min-h-0">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Products</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Receipt</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% partialdef table-row inline %}
+            {% for order in page_obj %}
+            <tr class="hover:bg-base-200/40">
+              <td class="font-medium">#{{ order.id|slice:":8" }}</td>
+              <td>
+                <div class="tooltip" data-tip="{{ order.created_at }}">
+                  <span>{{ order.created_at|date:"M d, Y" }}</span>
+                </div>
+              </td>
+              <td>{{ order.products_count }} item{{ order.products_count|pluralize }}</td>
+              <td class="font-mono">
+                {% if order.amount_dollars %}
+                ${{ order.amount_dollars|floatformat:2 }} {{ order.currency }}
+                {% else %}
+                -
+                {% endif %}
+              </td>
+              <td>
+                {% if order.status == "paid" %}
+                <span class="badge badge-success badge-sm">Paid</span>
+                {% elif order.status == "processing" %}
+                <span class="badge badge-warning badge-sm">Processing</span>
+                {% elif order.status == "canceled" %}
+                <span class="badge badge-error badge-sm">Canceled</span>
+                {% elif order.status == "payment_failed" %}
+                <span class="badge badge-error badge-sm">Payment Failed</span>
+                {% elif order.status == "requires_action" %}
+                <span class="badge badge-warning badge-sm">Requires Action</span>
+                {% else %}
+                <span class="badge badge-info badge-sm">{{ order.status|title }}</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if order.receipt %}
+                <div class="inline-flex gap-1">
+                  <a href="{{ order.receipt.receipt_url }}"
+                     target="_blank"
+                     class="btn btn-xs btn-ghost"
+                     aria-label="View receipt">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                  </a>
+                </div>
+                {% else %}
+                <span class="text-sm text-base-content/60">Receipt not available</span>
+                {% endif %}
+              </td>
+              <td>
+                <a href="{% url 'user_dashboard:order_detail' order.id %}"
+                   class="btn btn-square btn-ghost btn-sm"
+                   aria-label="View order details">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-base-content/80 size-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  </svg>
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+            {% endpartialdef table-row %}
+          </tbody>
+        </table>
+      </div>
+      <div class="card-body grow-0 shrink-0">
+        <!-- Load more button -->
+        <div class="flex justify-between items-center">
+          <p class="text-sm text-base-content/70">
+          Showing {{ page_obj.paginator.count }} order{{ page_obj.paginator.count|pluralize }}
+          </p>
+          <div class="join">
+            {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }}" class="join-item btn btn-sm">«</a>
+            {% endif %}
+
+            <button class="join-item btn btn-sm">Page {{ page_obj.number }}</button>
+
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}" class="join-item btn btn-sm">»</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="card bg-base-100 shadow-xl shrink-0">
+      <div class="card-body">
+        <div class="alert alert-info">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info shrink-0 w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <div>
+            <h3 class="font-bold">No Orders Found</h3>
+            <div class="text-sm">You haven't placed any orders yet. Browse our shop to get started!</div>
+          </div>
+        </div>
+        <div class="card-actions justify-end mt-4">
+          <a href="{% url 'shop:product_list' %}" class="btn btn-primary gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+            </svg>
+            Browse Shop
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+{% endblock content %}

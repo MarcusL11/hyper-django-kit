@@ -1,0 +1,106 @@
+{% comment %}
+Django Cotton Pagination Component for Shop
+
+Usage:
+  <c-shop.pagination :page_obj="page_obj" />
+
+Props:
+  - page_obj: Django Paginator Page object
+
+Features:
+  - Previous/Next arrow buttons
+  - Page number buttons with smart ellipsis
+  - Current page highlighted
+  - Datastar click handlers for dynamic updates
+  - Disabled state for boundary pages
+{% endcomment %}
+
+<c-vars page_obj />
+
+{% if page_obj and page_obj.paginator.num_pages > 1 %}
+<div class="flex justify-center mt-8">
+  <div class="join">
+    {% comment %} Previous Button {% endcomment %}
+    {% if page_obj.has_previous %}
+      <button
+        type="button"
+        class="join-item btn btn-sm"
+        data-on:click="document.getElementById('page-input').value='{{ page_obj.previous_page_number }}'; @get('{% url 'shop:lazy_load_products' %}', {contentType: 'form', selector: '#product-filter-form'})"
+        aria-label="Previous page">
+        <span class="iconify lucide--chevron-left size-4"></span>
+      </button>
+    {% else %}
+      <button class="join-item btn btn-sm btn-disabled" disabled aria-label="Previous page">
+        <span class="iconify lucide--chevron-left size-4"></span>
+      </button>
+    {% endif %}
+
+    {% comment %} Page Number Buttons {% endcomment %}
+    {% with page_obj.paginator.num_pages as total_pages %}
+    {% with page_obj.number as current_page %}
+
+      {% comment %} Logic: Show first page, last page, current page, and 2 pages on each side {% endcomment %}
+      {% for page_num in page_obj.paginator.page_range %}
+        {% comment %} Always show first page {% endcomment %}
+        {% if page_num == 1 %}
+          <button
+            type="button"
+            class="join-item btn btn-sm {% if current_page == 1 %}btn-active{% endif %}"
+            data-on:click="document.getElementById('page-input').value='1'; @get('{% url 'shop:lazy_load_products' %}', {contentType: 'form', selector: '#product-filter-form'})"
+            aria-label="Page 1"
+            {% if current_page == 1 %}aria-current="page"{% endif %}>
+            1
+          </button>
+
+        {% comment %} Show ellipsis if gap between first page and current range {% endcomment %}
+        {% elif page_num == 2 and current_page > 4 %}
+          <button class="join-item btn btn-sm btn-disabled" disabled>...</button>
+
+        {% comment %} Show pages around current page {% endcomment %}
+        {% elif page_num >= current_page|add:"-2" and page_num <= current_page|add:"2" and page_num != 1 and page_num != total_pages %}
+          <button
+            type="button"
+            class="join-item btn btn-sm {% if page_num == current_page %}btn-active{% endif %}"
+            data-on:click="document.getElementById('page-input').value='{{ page_num }}'; @get('{% url 'shop:lazy_load_products' %}', {contentType: 'form', selector: '#product-filter-form'})"
+            aria-label="Page {{ page_num }}"
+            {% if page_num == current_page %}aria-current="page"{% endif %}>
+            {{ page_num }}
+          </button>
+
+        {% comment %} Show ellipsis if gap between current range and last page {% endcomment %}
+        {% elif page_num == total_pages|add:"-1" and current_page < total_pages|add:"-3" %}
+          <button class="join-item btn btn-sm btn-disabled" disabled>...</button>
+
+        {% comment %} Always show last page {% endcomment %}
+        {% elif page_num == total_pages and total_pages > 1 %}
+          <button
+            type="button"
+            class="join-item btn btn-sm {% if current_page == total_pages %}btn-active{% endif %}"
+            data-on:click="document.getElementById('page-input').value='{{ total_pages }}'; @get('{% url 'shop:lazy_load_products' %}', {contentType: 'form', selector: '#product-filter-form'})"
+            aria-label="Page {{ total_pages }}"
+            {% if current_page == total_pages %}aria-current="page"{% endif %}>
+            {{ total_pages }}
+          </button>
+        {% endif %}
+      {% endfor %}
+
+    {% endwith %}
+    {% endwith %}
+
+    {% comment %} Next Button {% endcomment %}
+    {% if page_obj.has_next %}
+      <button
+        type="button"
+        class="join-item btn btn-sm"
+        data-on:click="document.getElementById('page-input').value='{{ page_obj.next_page_number }}'; @get('{% url 'shop:lazy_load_products' %}', {contentType: 'form', selector: '#product-filter-form'})"
+        aria-label="Next page">
+        <span class="iconify lucide--chevron-right size-4"></span>
+      </button>
+    {% else %}
+      <button class="join-item btn btn-sm btn-disabled" disabled aria-label="Next page">
+        <span class="iconify lucide--chevron-right size-4"></span>
+      </button>
+    {% endif %}
+  </div>
+</div>
+{% endif %}

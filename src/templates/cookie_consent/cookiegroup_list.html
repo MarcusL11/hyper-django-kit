@@ -1,0 +1,22 @@
+{% extends "cookie_consent/base.html" %}
+{% load i18n %}
+
+{% block title %}Cookie Preferences{% endblock %}
+
+{% block content %}
+<!-- Cookie Groups Section -->
+<section class="py-16 bg-base-100">
+
+  <div class="container mx-auto px-4 max-w-4xl">
+    <div class="space-y-6">
+      {% for cookie_group in object_list %}
+
+      <div class="flex items-center justify-center min-h-screen">
+        {% include "cookie_consent/_cookie_group.html" %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

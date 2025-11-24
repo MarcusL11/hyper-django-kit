@@ -1,0 +1,145 @@
+{% extends 'user_dashboard/base.html' %}
+{% load humanize pricing_filters %}
+
+
+{% block content %}
+<div id="layout-content">
+  <div class="min-sm:container">
+
+    {# Header Section #}
+    <div class="card card-border bg-base-300 rounded-box relative w-full overflow-hidden p-6 shrink-0">
+      <div class="flex justify-between">
+        <div>
+          <div class="flex items-center gap-1">
+            <a href="{% url 'user_dashboard:index'%}" class="hover:link text-base-content/80 text-sm">Dashboard</a>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-base-content/80 size-3.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+            <p class="text-sm">Subscription</p>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-base-content/80 size-3.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+            <p class="text-sm">Billing & Receipts </p>
+          </div>
+          <p class="text-primary mt-4 text-xl font-medium">
+            Billing & Receipts
+          </p>
+          <p class="text-base-content/80">
+            View and download your billing invoices, receipts, and payment history.
+          </p>
+        </div>
+      </div>
+      <span class="iconify lucide--receipt text-primary/5 absolute start-1/2 -bottom-12 size-44 -rotate-25"></span>
+    </div>
+
+    {# Invoices Table #}
+    <section class="mt-6">
+      {% if invoices %}
+        <div class="card bg-base-200 card-border shadow-xl overflow-hidden">
+          <div class="card-body grow-0">
+            <h2 class="card-title">Invoice History</h2>
+            <p class="text-sm text-base-content/70">View and download your billing invoices</p>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="table table-zebra">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for invoice in invoices %}
+                <tr>
+                  <td>
+                    <div class="tooltip" data-tip="{{ invoice.created }}">
+                      <span>{{ invoice.created|date:"M d, Y" }}</span>
+                    </div>
+                  </td>
+                  <td>{{ invoice.description|default:"Subscription Payment" }}</td>
+                  <td class="font-mono">{{ invoice|format_price_with_currency:"total" }}</td>
+                  <td>
+                    {% if invoice.status == "paid" %}
+                      <span class="badge badge-success">Paid</span>
+                    {% elif invoice.status == "open" %}
+                      <span class="badge badge-warning">Open</span>
+                    {% elif invoice.status == "void" %}
+                      <span class="badge badge-neutral">Void</span>
+                    {% elif invoice.status == "uncollectible" %}
+                      <span class="badge badge-error">Uncollectible</span>
+                    {% else %}
+                      <span class="badge badge-error">{{ invoice.status|title }}</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <div class="flex gap-2">
+                      {% if invoice.hosted_invoice_url %}
+                        <a href="{{ invoice.hosted_invoice_url }}" target="_blank" class="btn btn-xs btn-ghost" title="View Invoice">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          Invoice
+                        </a>
+                      {% endif %}
+                      {% if invoice.invoice_pdf %}
+                        <a href="{{ invoice.invoice_pdf }}" target="_blank" class="btn btn-xs btn-ghost" title="Download PDF">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                          </svg>
+                          PDF
+                        </a>
+                      {% endif %}
+                      {% if invoice.charge and invoice.charge.receipt_url %}
+                        <a href="{{ invoice.charge.receipt_url }}" target="_blank" class="btn btn-xs btn-ghost" title="View Receipt">
+                          <span class="iconify lucide--receipt size-4"></span>
+                          Receipt
+                        </a>
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="card-body">
+            <div class="flex justify-between items-center">
+              <p class="text-sm text-base-content/70">Showing last 20 invoices</p>
+              <a href="{% url 'subscriptions:billing_portal' %}" target="_blank" class="link link-primary text-sm">
+                View all in Stripe Portal →
+              </a>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <div class="alert alert-info">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-info shrink-0 w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <h3 class="font-bold">No Invoices Found</h3>
+                <div class="text-sm">You don't have any invoices yet. Invoices will appear here after your first payment.</div>
+              </div>
+            </div>
+            <div class="card-actions justify-end mt-4">
+              <a href="{% url 'user_dashboard:subscription_management' %}" class="btn btn-primary gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                </svg>
+                View Subscription
+              </a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </section>
+
+  </div>
+</div>
+{% endblock content %}

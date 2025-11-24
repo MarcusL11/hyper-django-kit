@@ -1,0 +1,49 @@
+
+
+{% load cookie_consent_tags static i18n %}
+{% if request|cookie_consent_enabled %}
+  {% not_accepted_or_declined_cookie_groups request as cookie_groups %}
+  {% if cookie_groups %}
+    {% cookie_consent_accept_url cookie_groups as url_accept %}
+    {% cookie_consent_decline_url cookie_groups as url_decline %}
+    <div x-data="{ show: true }"
+         x-show="show"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 -translate-y-full"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-300"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 -translate-y-full"
+         style="position: fixed !important; bottom: 80px; left: 0; right: 0; z-index: 9998;"
+         class="pointer-events-none">
+      <div class="container mx-auto px-4 max-w-4xl pointer-events-auto">
+        <div class="card bg-base-200 shadow-xl rounded-lg p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex-1 text-base-content">
+          <span class="font-semibold">{% translate "This site uses cookies for better performance and user experience." %}</span>
+          <a href="{% url 'cookie_consent_cookie_group_list' %}"
+            target="_blank"
+            class="link link-primary ml-2">{% translate "Cookies info" %}</a>
+        </div>
+        <div class="flex flex-row gap-2 mt-4 md:mt-0">
+          <form method="POST" action="{{ url_accept }}" @submit.prevent="show = false; $el.submit()">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{% url 'subscriptions:index' %}">
+            <button type="submit" class="btn btn-success btn-sm">{% translate "Accept All" %}</button>
+          </form>
+          <form method="POST" action="{{ url_decline }}" @submit.prevent="show = false; $el.submit()">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{% url 'subscriptions:index' %}">
+            <button type="submit" class="btn btn-error btn-sm">{% translate "Decline All" %}</button>
+          </form>
+        </div>  
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}
+{#---------GOOGLE ANALYTICS---------#}
+{% if request|cookie_group_declined:"google_analytics" %}
+
+{% else %}
+  <!-- Google tag (gtag.js) -->
+{% endif %}
