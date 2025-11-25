@@ -1,3 +1,4 @@
+<!--markdownlint-disable-->
 # HyperDjangoKit
 
 ![HyperDjangoKit Logo](src/static/images/hyper-django-kit-logo.png)
@@ -12,7 +13,7 @@
 
 HyperDjangoKit is a production-ready Django starter kit that combines SaaS subscriptions with e-commerce functionality. Built for developers who want to skip the 100+ hours of boilerplate setup and focus on building their unique features.
 
-Unlike other Django starters, HyperDjangoKit supports **dual revenue models**:
+HyperDjangoKit supports **dual revenue models**:
 
 - **Subscription-based SaaS** - Tiered pricing with recurring revenue (Free, Pro, Enterprise)
 - **E-Commerce Shop** - One-time product purchases with full shopping cart functionality
