@@ -1,0 +1,24 @@
+/* Typography styles for HyperDjangoKit Landing Page */
+
+/* Apply Space Mono to titles */
+h1, h2, h3, h4, h5, h6, .font-title {
+  font-family: 'Space Mono', monospace;
+}
+
+/* Apply Space Grotesk to body text */
+body, p, a, button, input, textarea, select, .font-body {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Theme-aware logo colors */
+.theme-logo path {
+  fill: #100F0F !important; /* Dark color for light theme */
+}
+
+[data-theme="dark"] .theme-logo path {
+  fill: #FFFCF0 !important; /* Light color for dark theme */
+}

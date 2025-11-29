@@ -1,0 +1,38 @@
+{% extends "allauth/layouts/base.html" %}
+{% load i18n static allauth_ui %}
+
+{% block head_title %}{% trans "Verification Sent" %}{% endblock %}
+
+{% block content %}
+<div class="space-y-8 text-center">
+  {# Icon #}
+  <div class="flex justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-20 text-primary">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+    </svg>
+  </div>
+
+  {# Header #}
+  <div class="space-y-2">
+    <h1 class="text-3xl md:text-4xl font-bold font-title">{% trans "Check Your Email" %}</h1>
+    <p class="text-base-content/70 font-body">
+      {% trans "We've sent a verification link to your email address." %}
+    </p>
+  </div>
+
+  {# Message #}
+  <div class="bg-base-200 rounded-box p-6 space-y-2 text-left">
+    <p class="font-body text-base-content/90">
+      {% trans "Follow the link provided in the email to finalize the signup process." %}
+    </p>
+    <p class="font-body text-base-content/70 text-sm">
+      {% trans "If you don't see the verification email in your main inbox, check your spam folder. Please contact us if you do not receive the verification email within a few minutes." %}
+    </p>
+  </div>
+
+  {# Back Button #}
+  <a href="{% url 'subscriptions:index' %}" class="btn btn-primary btn-lg font-body">
+    {% trans "Back to Home" %}
+  </a>
+</div>
+{% endblock %}

@@ -1,0 +1,215 @@
+{% extends 'user_dashboard/base.html' %}
+{% load static partials %}
+
+{% block content %}
+  <div class="card card-border bg-base-300 rounded-box relative w-full overflow-hidden p-6 shrink-0">
+    <div class="flex justify-between">
+      <div>
+        <div class="flex items-center gap-1">
+          <a href="{% url 'user_dashboard:index'%}" class="hover:link text-base-content/80 text-sm">Dashboard</a>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-base-content/80 size-3.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+          </svg>
+          <p class="text-sm">Account</p>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-base-content/80 size-3.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+          </svg>
+          <p class="text-sm">Profile</p>
+        </div>
+        <p class="text-primary mt-4 text-xl font-medium">
+          My Profile
+        </p>
+        <p class="text-base-content/80">
+          Configure your preferences and customize your account settings.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {# Main Profile Form #}
+  <div class="card bg-base-200 card-border shadow-md shrink-0">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="card-body space-y-8 sm:space-y-12 p-6 sm:p-8">
+
+        {# User Profile Section #}
+        <div class="grid grid-cols-1 gap-6 xl:grid-cols-5 xl:gap-8">
+          <div class="xl:col-span-2">
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Zm6-10.125a1.875 1.875 0 1 1-3.75 0 1.875 1.875 0 0 1 3.75 0Zm1.294 6.336a6.721 6.721 0 0 1-3.17.789 6.721 6.721 0 0 1-3.168-.789 3.376 3.376 0 0 1 6.338 0Z" />
+              </svg>
+              <p class="text-lg font-medium">User Profile</p>
+            </div>
+            <p class="text-base-content/60 mt-2">
+              Manage your account information and settings
+            </p>
+          </div>
+
+          <div class="xl:col-span-3">
+            {# Avatar Display - Centered #}
+            <div class="flex flex-col items-center gap-3 mb-6">
+              <div id="profile-picture-container" class="avatar">
+                <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                  {% if user.profile_image %}
+                    <img src="{{ user.profile_image.url }}" alt="{{ user.get_full_name|default:user.username }}" />
+                  {% else %}
+                    <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" alt="Default Avatar" />
+                  {% endif %}
+                </div>
+              </div>
+
+              <div class="flex gap-2">
+                {# Upload Button - Opens Modal #}
+                <button type="button"
+                        class="btn btn-sm btn-primary"
+                        onclick="upload_modal.showModal()">
+                  Change
+                </button>
+                {# Delete Button - Only show if image exists #}
+              </div>
+            </div>
+
+            {# Name Fields - Full Width Below Avatar #}
+            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+              {# First Name Field #}
+              <div class="form-control">
+                <label class="label" for="{{ profile_form.first_name.id_for_label }}">
+                  <span class="label-text">{{ profile_form.first_name.label }}</span>
+                </label>
+                <label class="input w-full {% if profile_form.first_name.errors %}input-error{% endif %}">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-base-content/60 size-4.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                  </svg>
+                  {{ profile_form.first_name }}
+                </label>
+                {% if profile_form.first_name.errors %}
+                  <label class="label">
+                    <span class="label-text-alt text-error">{{ profile_form.first_name.errors.0 }}</span>
+                  </label>
+                {% endif %}
+              </div>
+
+              {# Last Name Field #}
+              <div class="form-control">
+                <label class="label" for="{{ profile_form.last_name.id_for_label }}">
+                  <span class="label-text">{{ profile_form.last_name.label }}</span>
+                </label>
+                <label class="input w-full {% if profile_form.last_name.errors %}input-error{% endif %}">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-base-content/60 size-4.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                  </svg>
+                  {{ profile_form.last_name }}
+                </label>
+                {% if profile_form.last_name.errors %}
+                  <label class="label">
+                    <span class="label-text-alt text-error">{{ profile_form.last_name.errors.0 }}</span>
+                  </label>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {# Notification Section #}
+        {# TODO: Notifications will need to be managed, this is just for show based on user preferences #}
+        <div class="grid grid-cols-1 gap-6 xl:grid-cols-5 xl:gap-8">
+          <div class="xl:col-span-2">
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+              </svg>
+              <p class="text-lg font-medium">Notifications</p>
+            </div>
+            <p class="text-base-content/60 mt-2">
+              Manage your notification settings and preferences
+            </p>
+          </div>
+          <div class="xl:col-span-3">
+            <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+              <div class="form-control">
+                <label class="label" for="notification-channel">
+                  <span class="label-text">Channel</span>
+                </label>
+                <select class="select select-bordered w-full" aria-label="Notification Channel" id="notification-channel">
+                  <option value="email">Email</option>
+                </select>
+              </div>
+              <div class="form-control">
+                <label class="label" for="notification-new-order">
+                  <span class="label-text">Notify on categories</span>
+                </label>
+                <select class="select select-bordered w-full" aria-label="New Order" id="notification-new-order">
+                  <option value="all">All</option>
+                  <option value="important">Orders</option>
+                  <option value="important">Shipping</option>
+                  <option value="none">None</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {# Action Buttons #}
+        <div class="flex justify-end gap-3">
+          <button type="submit" class="btn btn-sm btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+            </svg>
+            Update Profile
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Open the modal using ID.showModal() method -->
+  <dialog id="upload_modal" class="modal">
+    <div class="modal-box">
+      <h3 class="text-lg font-bold">Upload Profile Picture</h3>
+      <p class="py-4 text-sm text-base-content/60">
+        Choose an image to upload. Maximum size: 8MB.<br> Supported formats: JPEG, PNG, WebP, GIF.
+      </p>
+
+      <form method="post" enctype="multipart/form-data" class="space-y-6 mb-4">
+        {% csrf_token %}
+
+        {# File Input #}
+        <div class="form-control w-full space-y-4">
+          <label class="label">
+            <span class="label-text">Select Image</span>
+          </label>
+          
+          {{ profile_form.profile_image }}
+
+          {% if profile_form.profile_image.errors %}
+            <label class="label">
+              <span class="label-text-alt text-error">{{ profile_form.profile_image.errors.0 }}</span>
+            </label>
+          {% endif %}
+          <label class="label">
+            <span class="label-text-alt">{{ profile_form.profile_image.help_text }}</span>
+          </label>
+        </div>
+
+        <div class="flex justify-between items-center">
+          {% if user.profile_image %}
+            <button form="delete-img" type="submit" class="btn btn-error">Remove Image</button>
+          {% endif %}
+          <button type="submit" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+            </svg>
+            Upload
+          </button>
+        </div>
+      </form>
+      <form id="delete-img" method="post" action="{% url 'user_dashboard:account_profile_delete_image' %}">
+        {% csrf_token %}
+      </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
+{% endblock content %}

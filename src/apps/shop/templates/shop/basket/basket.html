@@ -1,0 +1,167 @@
+{% extends 'shop/base_product_list.html' %}
+{% load static %}
+{% load pricing_filters %}
+
+{% block content %}
+<div class="min-h-screen bg-base-100">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-7xl">
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs text-sm mb-6 sm:mb-8">
+      <ul>
+        <li><a href="{% url 'subscriptions:index' %}" class="link link-hover">Home</a></li>
+        <li><a href="{% url 'shop:product_list' %}" class="link link-hover">Shop</a></li>
+        <li class="opacity-70">Basket</li>
+      </ul>
+    </div>
+
+    <!-- Page Title -->
+    <div class="mb-8 sm:mb-10">
+      <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">Shopping Basket</h1>
+    </div>
+
+  {% if basket and not basket.is_empty %}
+    <!-- Basket with Items -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Left Column: Basket Items (2/3 width) -->
+      <div class="lg:col-span-2">
+        <div class="space-y-4 sm:space-y-6">
+          {% for item in basket.items.all %}
+            <div class="card card-border bg-base-100 shadow-sm">
+              <div class="card-body p-4 sm:p-6">
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                  <!-- Product Info -->
+                  <div class="flex-1">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-2">{{ item.product.name }}</h3>
+                    <p class="text-base-content/70 text-sm leading-relaxed">{{ item.product.description|truncatewords:20 }}</p>
+                    {% if item.product.default_price %}
+                      <p class="text-xl sm:text-2xl font-semibold text-primary mt-3 sm:mt-4">{{ item.product.default_price|format_price_with_currency }}</p>
+                    {% endif %}
+                  </div>
+
+                  <!-- Quantity Controls -->
+                  <div class="flex flex-col sm:items-end gap-3 sm:gap-4">
+                    <form method="POST" action="{% url 'shop:update_basket_item' item.id %}" class="flex items-center gap-2">
+                      {% csrf_token %}
+                      <label class="text-sm font-medium">Qty:</label>
+                      <input
+                        type="number"
+                        name="quantity"
+                        value="{{ item.quantity }}"
+                        min="1"
+                        max="99"
+                        class="input input-bordered input-sm w-20"
+                        onchange="this.form.submit()"
+                      >
+                    </form>
+
+                    <!-- Line Total -->
+                    <div class="text-sm">
+                      <p class="text-base-content/60">Subtotal:</p>
+                      <p class="text-lg font-semibold">${{ item.line_total_dollars }}</p>
+                    </div>
+
+                    <!-- Remove Button -->
+                    <form method="POST" action="{% url 'shop:remove_basket_item' item.id %}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-ghost btn-sm text-error gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                        </svg>
+                        Remove
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+        <!-- Continue Shopping Link -->
+        <div class="mt-6">
+          <a href="{% url 'shop:product_list' %}" class="btn btn-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Continue Shopping
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Order Summary (1/3 width) -->
+      <div class="lg:col-span-1">
+        <div class="card card-border bg-base-100 shadow-md sticky top-4">
+          <div class="card-body">
+            <h2 class="card-title">Order Summary</h2>
+
+            <div class="divider my-2"></div>
+
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm">
+                <span class="text-base-content/70">Items:</span>
+                <span class="font-medium">{{ basket.total_items }}</span>
+              </div>
+
+              <div class="flex justify-between text-sm">
+                <span class="text-base-content/70">Subtotal:</span>
+                <span class="font-medium">${{ basket.total_amount_dollars }}</span>
+              </div>
+            </div>
+
+            <div class="divider my-2"></div>
+
+            <div class="flex justify-between text-lg font-bold">
+              <span>Total:</span>
+              <span class="text-primary">${{ basket.total_amount_dollars }} USD</span>
+            </div>
+
+            <!-- Checkout Button -->
+            <form method="POST" action="{% url 'shop:create_checkout_session' %}" class="mt-4">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary btn-lg w-full">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+                </svg>
+                Proceed to Checkout
+              </button>
+            </form>
+
+            <!-- Trust Badges -->
+            <div class="mt-6 space-y-2">
+              <div class="flex items-center gap-2 text-xs text-base-content/60">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-success">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                </svg>
+                <span>Secure Checkout</span>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-base-content/60">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-info">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Easy Returns</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% else %}
+    <!-- Empty Basket -->
+    <div class="flex flex-col items-center justify-center min-h-[400px] text-center">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-24 h-24 text-base-content/30 mb-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+      </svg>
+      <h2 class="text-2xl font-bold mb-2">Your basket is empty</h2>
+      <p class="text-base-content/60 mb-6">Add some products to get started!</p>
+      <a href="{% url 'shop:product_list' %}" class="btn btn-primary">
+        Browse Products
+      </a>
+    </div>
+  {% endif %}
+
+  </div>
+</div>
+{% endblock content %}

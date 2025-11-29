@@ -1,0 +1,202 @@
+{% extends 'user_dashboard/base.html' %}
+{% load partials %}
+{% block content %}
+    {# Header Section #}
+    <div class="card card-border bg-base-300 rounded-box relative w-full overflow-hidden p-6 shrink-0">
+      <div class="flex justify-between">
+        <div>
+          <div class="flex items-center gap-1">
+            <a href="{% url 'user_dashboard:index'%}" class="hover:link text-base-content/80 text-sm">Dashboard</a>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-base-content/80 size-3.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+            <p class="text-sm">Account</p>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-base-content/80 size-3.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+            <p class="text-sm">Email</p>
+          </div>
+          <p class="text-primary mt-4 text-xl font-medium">
+            Email Management
+          </p>
+          <p class="text-base-content/80">
+            Manage your email addresses and verification status.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {# Main Content Grid #}
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1 min-h-0">
+
+      {# TODO: Not shown in mobile view Email Addresses List - Left/Main Section #}
+      <div class="lg:col-span-8 flex flex-col min-h-0">
+        <div class="card card-border bg-base-200 shadow-xl flex-1 flex flex-col min-h-0">
+          <div class="card-body grow-0 shrink-0">
+            <h2 class="card-title">Your Email Addresses</h2>
+            <p class="text-sm text-base-content/70">Manage and verify your email addresses</p>
+          </div>
+
+          <div id="email-info-container" class="flex-1 overflow-auto min-h-0">
+            {% partialdef email-info-partial inline %}
+            {% if email_addresses %}
+            <div class="card-body">
+              <div class="space-y-3">
+                {% for email in email_addresses %}
+                <div class="card card-bordered bg-base-100 shadow-sm">
+                  <div class="card-body p-4">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+
+                      {# Email Info #}
+                      <div class="flex-1 min-w-0">
+                        <p class="font-medium text-base truncate">{{ email.email }}</p>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                          {% if email.primary %}
+                          <span class="badge badge-info badge-sm">Primary</span>
+                          {% endif %}
+                          {% if email.verified %}
+                          <span class="badge badge-success badge-sm">Verified</span>
+                          {% else %}
+                          <span class="badge badge-warning badge-sm">Unverified</span>
+                          {% endif %}
+                        </div>
+                      </div>
+
+                      {# Action Buttons #}
+                      <div class="flex flex-wrap gap-2">
+                        {% if not email.primary and email.verified %}
+                        <form data-on:submit="@post('{% url 'user_dashboard:account_email_make_primary' %}', {contentType: 'form'})" class="inline">
+                          {% csrf_token %}
+                          <input type="hidden" name="email_id" value="{{ email.pk }}">
+                          <button type="submit" class="btn btn-sm btn-outline btn-primary gap-2" title="Make Primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" />
+                            </svg>
+                            Make Primary
+                          </button>
+                        </form>
+                        {% endif %}
+
+                        {% if not email.verified %}
+                        <form action="{% url 'user_dashboard:account_email_resend_verification' %}" method="post" class="inline">
+                          {% csrf_token %}
+                          <input type="hidden" name="email_id" value="{{ email.pk }}">
+                          <button type="submit" class="btn btn-sm btn-outline gap-2" title="Resend Verification">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                            </svg>
+                            Resend
+                          </button>
+                        </form>
+                        {% endif %}
+
+                        {% if not email.primary %}
+                        <!-- TODO: Update with DaisyUI modal for confirmation passing email id. Restructure form needed-->
+                        <form action="{% url 'user_dashboard:account_email_remove' %}"
+                              method="post"
+                              class="inline"
+                              onsubmit="return confirm('Are you sure you want to remove this email address?');">
+                          {% csrf_token %}
+                          <input type="hidden" name="email_id" value="{{ email.pk }}">
+                          <button type="submit" class="btn btn-sm btn-outline btn-error" title="Remove">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                            </svg>
+                          </button>
+                        </form>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% else %}
+            <div class="card-body">
+              <div class="alert alert-info">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>You have no email addresses configured.</span>
+              </div>
+            </div>
+            {% endif %}
+            {% endpartialdef email-info-partial %}
+          </div>
+        </div>
+      </div>
+
+      {# Add Email Form - Right/Sidebar Section #}
+      <div class="lg:col-span-4 shrink-0">
+        <div class="card card-border bg-base-200 shadow-xl shrink-0">
+          <div class="card-body">
+            <h2 class="card-title text-lg">Add Email Address</h2>
+            <p class="text-sm text-base-content/70">Add an additional email to your account</p>
+
+            
+            {% partialdef add-email-partial inline %}
+            <div id="add-email-form-container">
+              <form action="{% url 'user_dashboard:account_email' %}" method="post" class="mt-4">
+                {% csrf_token %}
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text font-medium">Email Address</span>
+                  </label>
+                  {% if add_form.email.errors %}
+                  <input type="email"
+                         autofocus
+                         value="{{ add_form.email.value|default:'' }}"
+                         name="{{ add_form.email.name }}"
+                         placeholder="email@example.com"
+                         class="input input-bordered input-error w-full"
+                         required>
+                  <label class="label">
+                    <span class="label-text-alt text-error">{{ add_form.email.errors.0 }}</span>
+                  </label>
+                  {% else %}
+                  <input type="email"
+                         autofocus
+                         value="{{ add_form.email.value|default:'' }}"
+                         name="{{ add_form.email.name }}"
+                         placeholder="email@example.com"
+                         class="input input-bordered w-full"
+                         required>
+                  {% endif %}
+                </div>
+
+                <div class="form-control mt-6">
+                  <button 
+                    type="submit" 
+                    class="btn btn-primary w-full gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    Add Email
+                  </button>
+                </div>
+              </form>
+            </div>
+            {% endpartialdef add-email-partial %}
+
+            <div class="divider my-4"></div>
+
+            <div class="alert alert-info">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+              </svg>
+              <div class="text-sm">
+                <p class="font-semibold mb-2">Important:</p>
+                <ul class="list-disc list-inside space-y-1">
+                  <li>New emails must be verified before use</li>
+                  <li>Only verified emails can be set as primary</li>
+                  <li>You cannot remove your primary email</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+{% endblock content %}

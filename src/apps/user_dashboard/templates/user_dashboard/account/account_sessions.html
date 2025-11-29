@@ -1,0 +1,235 @@
+{% extends 'user_dashboard/base.html' %}
+{% load humanize partials %}
+{% block content %}
+
+    {# Header Section #}
+    <div class="card card-border bg-base-300 rounded-box relative w-full overflow-hidden p-6 shrink-0">
+      <div class="flex justify-between">
+        <div>
+          <div class="flex items-center gap-1">
+            <a href="{% url 'user_dashboard:index'%}" class="hover:link text-base-content/80 text-sm">Dashboard</a>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-base-content/80 size-3.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+            <p class="text-sm">Account</p>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-base-content/80 size-3.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+            <p class="text-sm">Sessions</p>
+          </div>
+          <p class="text-primary mt-4 text-xl font-medium">
+            Active Sessions
+          </p>
+          <p class="text-base-content/80">
+            Manage devices and browsers currently signed into your account.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    {# Main Content #}
+    <div class="mt-6">
+
+      {# Active Sessions List #}
+      {% partialdef session-info-partial inline %}
+      <div id="session-info-container">
+        <div class="card bg-base-200 card-border shadow-md shrink-0">
+          <div class="card-body">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+              <div>
+                <h2 class="card-title">Active Sessions</h2>
+                <p class="text-sm text-base-content/70">Manage devices and browsers currently signed into your account</p>
+              </div>
+
+              {% if sessions|length > 1 %}
+              <form action="{% url 'user_dashboard:account_sessions' %}" method="post" class="inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline btn-error btn-sm gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1012.728 0M12 3v9" />
+                  </svg>
+                  Sign Out Other Sessions
+                </button>
+              </form>
+              {% endif %}
+            </div>
+
+            {% if sessions %}
+            <div class="overflow-x-auto">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Device & Browser</th>
+                    <th>IP Address</th>
+                    <th>Started</th>
+                    <th>Last Seen</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for session in sessions %}
+                  <tr>
+                    {# Device & Browser #}
+                    <td>
+                      <div class="flex items-center gap-3">
+                        <div class="avatar placeholder">
+                          <div class="bg-base-300 text-neutral-content rounded-full w-12 items-center justify-center flex">
+                            {% if 'Mobile' in session.user_agent or 'Android' in session.user_agent or 'iPhone' in session.user_agent %}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                            </svg>
+                            {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" />
+                            </svg>
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div>
+                          <div class="font-medium" title="{{ session.user_agent }}">
+                            {{ session.user_agent|truncatechars:50 }}
+                          </div>
+                          {% if session.is_current %}
+                          <div class="text-xs text-base-content/70">This device</div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </td>
+
+                    {# IP Address #}
+                    <td>
+                      <span class="font-mono text-sm">{{ session.ip }}</span>
+                    </td>
+
+                    {# Started #}
+                    <td>
+                      <div class="tooltip" data-tip="{{ session.created_at }}">
+                        <span class="text-sm">{{ session.created_at|naturaltime }}</span>
+                      </div>
+                    </td>
+
+                    {# Last Seen #}
+                    <td>
+                      {% if session.last_seen_at %}
+                      <div class="tooltip" data-tip="{{ session.last_seen_at }}">
+                        <span class="text-sm">{{ session.last_seen_at|naturaltime }}</span>
+                      </div>
+                      {% else %}
+                      <span class="text-sm text-base-content/50">N/A</span>
+                      {% endif %}
+                    </td>
+
+                    {# Status #}
+                    <td>
+                      {% if session.is_current %}
+                      <span class="badge badge-success gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Current
+                      </span>
+                      {% else %}
+                      <span class="badge badge-ghost">Active</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>No active sessions found. Session management may not be enabled.</span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endpartialdef session-info-partial %}
+
+      {# Information Cards Grid #}
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+
+        {# Session Security Info #}
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h3 class="card-title text-lg">Session Security</h3>
+
+            <div class="space-y-3 mt-4">
+              <div class="flex gap-3">
+                <div class="shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-info">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-semibold text-sm">Review Sessions Regularly</p>
+                  <p class="text-xs text-base-content/70">Check for any unfamiliar devices or locations and sign them out immediately</p>
+                </div>
+              </div>
+
+              <div class="flex gap-3">
+                <div class="shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-info">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-semibold text-sm">Secure Public Devices</p>
+                  <p class="text-xs text-base-content/70">Always sign out when using shared or public computers</p>
+                </div>
+              </div>
+
+              <div class="flex gap-3">
+                <div class="shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-info">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-semibold text-sm">Suspicious Activity</p>
+                  <p class="text-xs text-base-content/70">If you notice unusual activity, change your password immediately</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {# What are Sessions #}
+        <div class="card bg-base-200 shadow-xl">
+          <div class="card-body">
+            <h3 class="card-title text-lg">What are Sessions?</h3>
+
+            <div class="space-y-2 mt-4 text-sm">
+              <p>A session is created each time you sign in to your account from a device or browser. Sessions allow you to stay signed in without entering your password every time.</p>
+
+              <p class="text-base-content/70">Each session shows:</p>
+
+              <ul class="list-disc list-inside space-y-1 text-base-content/70 ml-2">
+                <li>The device and browser you used</li>
+                <li>The IP address of your connection</li>
+                <li>When the session was created</li>
+                <li>When it was last active</li>
+              </ul>
+
+              <div class="divider my-2"></div>
+
+              <div class="alert alert-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                </svg>
+                <div class="text-xs">
+                  <p class="font-semibold">Note:</p>
+                  <p>Signing out of other sessions will require you to sign in again on those devices.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,16 @@
+<!-- Start: Skeleton Loads on a grid layout -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+  {% for i in "1234"|make_list %}
+  <div class="card bg-base-100 shadow-xl border border-base-300">
+    <div class="skeleton aspect-square"></div>
+    <div class="card-body gap-3">
+      <div class="skeleton h-4 w-28"></div>
+      <div class="skeleton h-4 w-full"></div>
+      <div class="skeleton h-4 w-full"></div>
+      <div class="skeleton h-4 w-20 mt-2"></div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<!-- End: Skeleton Loads on a grid layout -->
+

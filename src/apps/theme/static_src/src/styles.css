@@ -1,0 +1,91 @@
+@import "tailwindcss";
+/**
+ * Configure dark mode to work with DaisyUI's data-theme attribute
+ * This makes dark: utilities respond to data-theme="dark" instead of only system preference
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@plugin "daisyui" {
+  themes: all;
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: #100F0F;
+  --color-base-200: #1C1B1A;
+  --color-base-300: #282726;
+  --color-base-content: #CECDC3;
+  --color-primary: #214A35;
+  --color-primary-content: #CECDC3;
+  --color-secondary: #66B58E;
+  --color-secondary-content: #CECDC3;
+  --color-accent: rgb(32, 94, 166);
+  --color-accent-content: #CECDC3;
+  --color-neutral: oklch(14% 0.005 285.823);
+  --color-neutral-content: #CECDC3;
+  --color-info: #4385BE;
+  --color-info-content: #CECDC3;
+  --color-success: #879A39;
+  --color-success-content: #CECDC3;
+  --color-warning: #D0A215;
+  --color-warning-content: #100F0F;
+  --color-error: #D14D41;
+  --color-error-content: #CECDC3;
+  --radius-selector: 2rem;
+  --radius-field: 2rem;
+  --radius-box: 2rem;
+  --size-selector: 0.21875rem;
+  --size-field: 0.25rem;
+  --border: 1.5px;
+  --depth: 1;
+  --noise: 1;
+}
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: #FFFCF0;
+  --color-base-200: #F2F0E5;
+  --color-base-300: #E6E4D9;
+  --color-base-content: #100F0F;
+  --color-primary: #214A35;
+  --color-primary-content: #CECDC3;
+  --color-secondary: #66B58E;
+  --color-secondary-content: #CECDC3;
+  --color-accent: rgb(32, 94, 166);
+  --color-accent-content: #CECDC3;
+  --color-neutral: oklch(14% 0.005 285.823);
+  --color-neutral-content: #CECDC3;
+  --color-info: #4385BE;
+  --color-info-content: #CECDC3;
+  --color-success: #879A39;
+  --color-success-content: #CECDC3;
+  --color-warning: #D0A215;
+  --color-warning-content: #100F0F;
+  --color-error: #D14D41;
+  --color-error-content: #CECDC3;
+  --radius-selector: 2rem;
+  --radius-field: 2rem;
+  --radius-box: 2rem;
+  --size-selector: 0.21875rem;
+  --size-field: 0.25rem;
+  --border: 1.5px;
+  --depth: 1;
+  --noise: 1;
+}
+
+
+
+/**
+  * A catch-all path to Django template files, JavaScript, and Python files
+  * that contain Tailwind CSS classes and will be scanned by Tailwind to generate the final CSS file.
+  *
+  * If your final CSS file is not being updated after code changes, you may want to broaden or narrow
+  * the scope of this path.
+  */
+@source "../../../**/*.{html,py,js}";

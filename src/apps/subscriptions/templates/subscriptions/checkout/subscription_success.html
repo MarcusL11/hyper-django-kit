@@ -1,0 +1,15 @@
+{% extends "subscriptions/base_landing.html" %}
+{% load cotton %}
+
+{% block title_content %}Subscription Successful {% endblock title_content %}
+
+{% block content %}
+  <c-result-card
+    result_type="success"
+    heading="Purchase Successful"
+    message="Thank you for subscribing!"
+    submessage="Your subscription is now active, and you can access all the premium features."
+    primary_url="{% url 'user_dashboard:index' %}"
+    primary_text="Go to Dashboard"
+  />
+{% endblock content %}

@@ -1,0 +1,138 @@
+{% extends "allauth/layouts/base.html" %}
+{% load i18n static allauth_ui %}
+
+{% block head_title %}{% trans "Sign Up" %}{% endblock %}
+
+{% block content %}
+<div class="space-y-8">
+  {# Header #}
+  <div class="text-center space-y-2">
+    <h1 class="text-3xl md:text-4xl font-bold font-title">{% trans "Create Account" %}</h1>
+    <p class="text-base-content/70 font-body">{% trans "Start your journey with us" %}</p>
+  </div>
+
+  {# Form #}
+  {% if not SOCIALACCOUNT_ONLY %}
+    <form method="post" action="{% url 'account_signup' %}" class="space-y-6">
+      {% csrf_token %}
+
+      {# Non-field errors #}
+      {% for error in form.non_field_errors %}
+        <div role="alert" class="alert alert-error">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          <span>{{ error }}</span>
+        </div>
+      {% endfor %}
+
+      {# Email Field #}
+      <fieldset class="fieldset">
+        <label class="input input-lg w-full">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-[1em] opacity-50">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+          </svg>
+          <input type="email"
+                 name="email"
+                 placeholder="{% trans 'Email address' %}"
+                 required
+                 {% if form.email.value %}value="{{ form.email.value }}"{% endif %} />
+        </label>
+        {% if form.email.errors %}
+          <div class="text-error text-sm mt-1">
+            {{ form.email.errors.0 }}
+          </div>
+        {% endif %}
+      </fieldset>
+
+      {# Username Field (if required) #}
+      {% if form.username %}
+      <fieldset class="fieldset">
+        <label class="input input-lg w-full">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-[1em] opacity-50">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+          </svg>
+          <input type="text"
+                 name="username"
+                 placeholder="{% trans 'Username' %}"
+                 required
+                 {% if form.username.value %}value="{{ form.username.value }}"{% endif %} />
+        </label>
+        {% if form.username.errors %}
+          <div class="text-error text-sm mt-1">
+            {{ form.username.errors.0 }}
+          </div>
+        {% endif %}
+      </fieldset>
+      {% endif %}
+
+      {# Password Field #}
+      <fieldset class="fieldset">
+        <label class="input input-lg w-full">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-[1em] opacity-50">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+          <input type="password"
+                 name="password1"
+                 placeholder="{% trans 'Password' %}"
+                 required />
+        </label>
+        {% if form.password1.errors %}
+          <div class="text-error text-sm mt-1">
+            {{ form.password1.errors.0 }}
+          </div>
+        {% endif %}
+        {% if form.password1.help_text %}
+          <p class="text-xs text-base-content/60 mt-1">{{ form.password1.help_text }}</p>
+        {% endif %}
+      </fieldset>
+
+      {# Confirm Password Field (if required) #}
+      {% if form.password2 %}
+      <fieldset class="fieldset">
+        <label class="input input-lg w-full">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-[1em] opacity-50">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+          <input type="password"
+                 name="password2"
+                 placeholder="{% trans 'Confirm Password' %}"
+                 required />
+        </label>
+        {% if form.password2.errors %}
+          <div class="text-error text-sm mt-1">
+            {{ form.password2.errors.0 }}
+          </div>
+        {% endif %}
+      </fieldset>
+      {% endif %}
+
+      {# Hidden fields #}
+      {{ redirect_field }}
+
+      {# Submit Button #}
+      <button type="submit" class="btn btn-primary btn-lg btn-block font-body">
+        {% trans "Sign Up" %}
+      </button>
+    </form>
+  {% endif %}
+
+  {# Divider #}
+  {% if SOCIALACCOUNT_ENABLED %}
+    <div class="divider font-body">{% trans "OR" %}</div>
+
+    {# Social Signup #}
+    {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+  {% endif %}
+
+  {# Login link #}
+  {% if not SOCIALACCOUNT_ONLY %}
+    <div class="text-center text-sm font-body">
+      {% trans "Already have an account?" %}
+      <a href="{% url 'account_login' %}" class="link link-primary font-medium">
+        {% trans "Sign in" %}
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

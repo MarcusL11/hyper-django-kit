@@ -1,0 +1,17 @@
+{% extends "subscriptions/base_landing.html" %}
+{% load cotton %}
+
+{% block title_content %}Checkout Canceled{% endblock title_content %}
+
+{% block content %}
+  <c-result-card
+    result_type="warning"
+    heading="Subscription Canceled"
+    message="Your subscription process was canceled."
+    submessage="No charges were made. You can restart the subscription process whenever you're ready."
+    primary_url="{% url 'user_dashboard:subscription_plans' %}"
+    primary_text="View Subscription Plans"
+    secondary_url="{% url 'user_dashboard:index' %}"
+    secondary_text="Go to Dashboard"
+  />
+{% endblock content %}

@@ -1,0 +1,69 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+*.py[cod]
+build/
+wheels/
+*.egg-info
+*.pyo
+*.pyd
+*.pyc
+*.pyo
+*.pyd
+.env
+ENV/
+!*.env.sample
+PROMPT_TEMPLATES.md
+CLAUDE.md
+
+
+# Virtual environments
+*.venv
+venv/
+venv.bak/
+
+# Django
+*.log
+db.sqlite3
+media/
+staticfiles/
+staticfiles_collected/
+local_settings.py
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VSCode/IDE
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Pipenv/Poetry
+Pipfile.lock
+poetry.lock
+
+# Migrations (optional, if you want to ignore generated migrations)
+# **/migrations/*.pyc
+# **/migrations/__pycache__/
+
+# Coverage reports
+htmlcov/
+.coverage
+.tox/
+.nox/
+.cache/
+.pytest_cache/
+
+# Other
+*.swp
+*.bak
+*.tmp
+
+node_modules
+
+```
+
+

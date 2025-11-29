@@ -1,0 +1,102 @@
+<c-vars
+  result_type
+  icon_type
+  heading
+  message
+  submessage
+  primary_url
+  primary_text="Continue"
+  secondary_url
+  secondary_text="Go Back"
+/>
+
+<div class="min-h-screen flex items-center justify-center px-4">
+  <div class="card bg-base-100 shadow-xl max-w-2xl w-full">
+    <div class="card-body items-center text-center">
+
+      <!-- Dynamic Icon based on result_type or icon_type -->
+      <div class="mb-6">
+        {% if icon_type %}
+          {% with icon=icon_type %}
+            {% if icon == "success" %}
+              <!-- Success Icon - Green Checkmark Circle -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            {% elif icon == "error" %}
+              <!-- Error Icon - Red X Circle -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            {% elif icon == "warning" %}
+              <!-- Warning Icon - Yellow Triangle -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            {% else %}
+              <!-- Info Icon - Blue Info Circle -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            {% endif %}
+          {% endwith %}
+        {% else %}
+          {% with icon=result_type %}
+            {% if icon == "success" %}
+              <!-- Success Icon - Green Checkmark Circle -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            {% elif icon == "error" %}
+              <!-- Error Icon - Red X Circle -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            {% elif icon == "warning" %}
+              <!-- Warning Icon - Yellow Triangle -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            {% else %}
+              <!-- Info Icon - Blue Info Circle -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            {% endif %}
+          {% endwith %}
+        {% endif %}
+      </div>
+
+      <!-- Heading -->
+      <h2 class="card-title text-3xl md:text-4xl mb-4">
+        {{ heading }}
+      </h2>
+
+      <!-- Primary Message -->
+      <p class="text-lg text-base-content/80 mb-2">
+        {{ message|safe }}
+      </p>
+
+      <!-- Secondary Message (optional) -->
+      {% if submessage %}
+      <p class="text-base-content/70 mb-{% if secondary_url %}8{% else %}6{% endif %}">
+        {{ submessage }}
+      </p>
+      {% endif %}
+
+      <!-- Action Buttons -->
+      <div class="card-actions {% if secondary_url %}flex-col sm:flex-row gap-4{% endif %}">
+        <a href="{{ primary_url }}" class="btn btn-primary btn-lg">
+          {{ primary_text }}
+        </a>
+
+        {% if secondary_url %}
+          <a href="{{ secondary_url }}" class="btn btn-ghost btn-lg">
+            {{ secondary_text }}
+          </a>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,183 @@
+{% extends 'shop/base_product_list.html' %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen bg-base-100">
+
+  {# Main Content #}
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 max-w-7xl">
+
+    {# Breadcrumbs #}
+    <div class="breadcrumbs text-sm mb-6 sm:mb-8">
+      <ul>
+        <li><a href="{% url 'subscriptions:index' %}" class="link link-hover">Home</a></li>
+        <li><a href="{% url 'shop:product_list' %}" class="link link-hover">Shop</a></li>
+        <li class="opacity-70">{{ product.name }}</li>
+      </ul>
+    </div>
+
+    {# Product Detail Grid #}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16">
+
+      {# Left Column: Image Carousel #}
+      <div>
+        {% include 'shop/product_detail/product_carousel.html' %}
+      </div>
+
+      {# Right Column: Product Information #}
+      <div class="flex flex-col gap-6 sm:gap-8">
+
+        {# Product Name #}
+        <div>
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-3 sm:mb-4">
+            {{ product.name }}
+          </h1>
+
+          {# Rating (if available) #}
+          <div class="flex items-center gap-2">
+            <div class="rating rating-sm">
+              <input type="radio" name="rating-2" class="mask mask-star-2 bg-warning" checked disabled />
+              <input type="radio" name="rating-2" class="mask mask-star-2 bg-warning" checked disabled />
+              <input type="radio" name="rating-2" class="mask mask-star-2 bg-warning" checked disabled />
+              <input type="radio" name="rating-2" class="mask mask-star-2 bg-warning" checked disabled />
+              <input type="radio" name="rating-2" class="mask mask-star-2 bg-warning" checked disabled />
+            </div>
+            <span class="text-sm text-base-content/60">Rated 5 out of 5</span>
+          </div>
+        </div>
+
+        {# Price #}
+        <div>
+          <p class="text-base-content/60 text-sm mb-2">From</p>
+          <p class="text-4xl sm:text-5xl font-semibold text-primary">${{ product.price }}</p>
+          <p class="text-base-content/60 text-sm mt-1">USD</p>
+        </div>
+
+        {# Description #}
+        <div>
+          <p class="text-base sm:text-lg text-base-content/80 leading-relaxed">
+            {{ product.description }}
+          </p>
+        </div>
+
+        {# Language Dropdown #}
+        {% if product.languages %}
+        <div>
+          <label class="form-control w-full max-w-xs">
+            <div class="label">
+              <span class="label-text font-semibold text-base">Language</span>
+            </div>
+            <select class="select select-bordered w-full">
+              {% for language in product.languages %}
+              <option {% if forloop.first %}selected{% endif %}>{{ language }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        </div>
+        {% endif %}
+
+        {# Personalization Section #}
+        {% if product.personalization %}
+        <div class="card card-border bg-base-200">
+          <div class="card-body p-4 sm:p-6">
+            <div class="flex items-center gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-primary shrink-0">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+              </svg>
+              <div>
+                <p class="font-semibold">{{ product.personalization }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {# Add to Cart Button #}
+        <div class="pt-4">
+          {% if user.is_authenticated %}
+            <form method="POST" action="{% url 'shop:add_to_basket' %}">
+              {% csrf_token %}
+              <input type="hidden" name="price_id" value="{{ product.price_id }}">
+              <input type="hidden" name="stripe_product_id" value="{{ product.stripe_product_id }}">
+              <input type="hidden" name="quantity" value="1">
+              <button type="submit" class="btn btn-primary btn-lg w-full gap-2 text-base sm:text-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                </svg>
+                Add to Cart
+              </button>
+            </form>
+          {% else %}
+            <a href="{% url 'account_login' %}?next={{ request.get_full_path|urlencode }}"
+               class="btn btn-primary btn-lg w-full gap-2 text-base sm:text-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+              </svg>
+              Login to Add to Cart
+            </a>
+          {% endif %}
+        </div>
+
+        {# Divider #}
+        <div class="divider my-2"></div>
+
+        {# Accordions Section #}
+        {% if product.accordions %}
+        <div class="space-y-2">
+          {% for accordion in product.accordions %}
+          <div class="collapse collapse-arrow bg-base-200 border border-base-300">
+            <input type="radio" name="product-accordion" {% if forloop.first %}checked="checked"{% endif %} />
+            <div class="collapse-title font-semibold text-base">{{ accordion.title }}</div>
+            <div class="collapse-content">
+              <p class="text-sm text-base-content/70 leading-relaxed">{{ accordion.content }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {# Additional Info Cards #}
+        <div class="grid grid-cols-3 gap-3 sm:gap-4 mt-4">
+          <div class="card card-border bg-base-100 p-3 sm:p-4">
+            <div class="flex flex-col items-center text-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 sm:size-10 text-primary">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <p class="text-xs sm:text-sm font-semibold">Perfect for</p>
+                <p class="text-xs text-base-content/60">ages 2-5</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-border bg-base-100 p-3 sm:p-4">
+            <div class="flex flex-col items-center text-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 sm:size-10 text-primary">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+              </svg>
+              <div>
+                <p class="text-xs sm:text-sm font-semibold">Preview</p>
+                <p class="text-xs text-base-content/60">all 34 pages</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-border bg-base-100 p-3 sm:p-4">
+            <div class="flex flex-col items-center text-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 sm:size-10 text-primary">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
+              </svg>
+              <div>
+                <p class="text-xs sm:text-sm font-semibold">Printed</p>
+                <p class="text-xs text-base-content/60">in 2-4 days</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock content %}
