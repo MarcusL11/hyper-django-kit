@@ -1,4 +1,4 @@
-{% extends "subscriptions/base_landing.html" %}
+{% extends "landing/base.html" %}
 {% load cotton %}
 
 {% block content %}
@@ -32,10 +32,10 @@
     </div>
 
     <!-- Logo -->
-    <a href="{% url 'subscriptions:index' %}" class="btn btn-ghost text-lg hidden md:flex"><svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 512 512" class="theme-logo"><path d="M29.805 29.777L242.14 209.55H118.712l112.54 86.784H95.995l225.656 174.012-81.537-116.05 66.487.143 179.185 138.175-171.96-244.746h84.568L248.082 29.776H29.805z"/></svg>HyperDjangoKit</a>
+    <a href="{% url 'landing:index' %}" class="btn btn-ghost text-lg hidden md:flex"><svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 512 512" class="theme-logo"><path d="M29.805 29.777L242.14 209.55H118.712l112.54 86.784H95.995l225.656 174.012-81.537-116.05 66.487.143 179.185 138.175-171.96-244.746h84.568L248.082 29.776H29.805z"/></svg>HyperDjangoKit</a>
   </div>
 
-    <a href="{% url 'subscriptions:index' %}" class="btn btn-ghost text-lg md:hidden"><svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 512 512" class="theme-logo"><path d="M29.805 29.777L242.14 209.55H118.712l112.54 86.784H95.995l225.656 174.012-81.537-116.05 66.487.143 179.185 138.175-171.96-244.746h84.568L248.082 29.776H29.805z"/></svg>HyperDjangoKit</a>
+    <a href="{% url 'landing:index' %}" class="btn btn-ghost text-lg md:hidden"><svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 512 512" class="theme-logo"><path d="M29.805 29.777L242.14 209.55H118.712l112.54 86.784H95.995l225.656 174.012-81.537-116.05 66.487.143 179.185 138.175-171.96-244.746h84.568L248.082 29.776H29.805z"/></svg>HyperDjangoKit</a>
 
   <!-- Desktop Menu -->
   <div class="navbar-center hidden lg:flex">
@@ -342,7 +342,7 @@
 
           <!-- Quote -->
           <p class="font-body text-lg text-base-content/90 mb-6 max-w-xl">
-            "As a solo founder, this saved me weeks of setup time. The Stripe integration alone is worth itjust works perfectly out of the box."
+            "As a solo founder, this saved me weeks of setup time. The Stripe integration alone is worth itjust works perfectly out of the box."
           </p>
 
           <!-- Author Info -->

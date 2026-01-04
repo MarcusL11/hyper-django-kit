@@ -6,7 +6,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("secret-admin-url/", admin.site.urls),
-    path("", include("apps.subscriptions.urls", namespace="subscriptions")),
+    path("", include("apps.landing.urls", namespace="landing")),
+    path("subscriptions/", include("apps.subscriptions.urls", namespace="subscriptions")),
     path("accounts/", include("allauth.urls")),
     path("cookies/", include("cookie_consent.urls")),
     path("stripe/", include("djstripe.urls", namespace="djstripe")),

@@ -8,7 +8,6 @@ from . import views
 app_name = "subscriptions"
 
 urlpatterns = [
-    path("", views.index, name="index"),
     path(
         "create-checkout-session/",
         views.create_checkout_session,
