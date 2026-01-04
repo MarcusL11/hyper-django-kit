@@ -3,9 +3,7 @@ django-tailwind==4.4.1
 psycopg2-binary==2.9.11
 django-environ==0.12.0
 django-allauth[socialaccount]==65.12.1
-django-allauth-ui==1.8.1
 django-widget-tweaks==1.5.0
-slippers==0.6.2
 django-cookie-consent==0.9.0
 dj-stripe==2.10.3
 django-cotton==2.1.3

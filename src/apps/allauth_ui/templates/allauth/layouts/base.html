@@ -1,145 +1,93 @@
+{% extends "landing/base.html" %}
 {% load i18n %}
-{% load static tailwind_tags %}
-{% load allauth_ui %}
-{% load cotton %}
-{% get_current_language as LANGUAGE_CODE %}
-<!doctype html>
-<html lang="{{ LANGUAGE_CODE }}" class="group/html">
-  <head>
-    <title>{% block head_title %}{% endblock head_title %} - HyperDjangoKit</title>
-    <meta charset="UTF-8" />
-    <meta name="author" content="HyperDjangoKit" />
-    <meta
-        name="keywords"
-        content="Django, SaaS, starter kit, authentication, Python, web development" />
-    <meta
-        name="description"
-        content="From Idea to Deployment, Skip the 100-Hour Setup. The complete Django SaaS starter kit built for speed and long-term maintainability." />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {# Google Fonts - Space Mono & Space Grotesk #}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
 
-    {# Main CSS #}
-    {% tailwind_css %}
-    <script src="{% static 'js/theme-controller.js' %}"></script>
-    {% block extra_head %}
-    {% endblock extra_head %}
-  </head>
+{% block title %}{% block head_title %}{% endblock head_title %}{% endblock title %}
 
-  <body class="min-h-screen bg-base-100 flex flex-col">
-    {# Header with Logo and Theme Toggle #}
-    <header class="p-4 flex justify-between items-center">
-      <a href="{% url 'landing:index' %}" class="btn btn-ghost text-lg">
-        <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 512 512" class="theme-logo">
-          <path d="M29.805 29.777L242.14 209.55H118.712l112.54 86.784H95.995l225.656 174.012-81.537-116.05 66.487.143 179.185 138.175-171.96-244.746h84.568L248.082 29.776H29.805z"/>
-        </svg>
-        HyperDjangoKit
-      </a>
+{% block content %}
+<div class="min-h-screen bg-base-100 flex flex-col">
+  {# Header with Logo and Theme Toggle #}
+  <header class="p-4 flex justify-between items-center">
+    <a href="{% url 'landing:index' %}" class="btn btn-ghost text-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 512 512" class="theme-logo">
+        <path d="M29.805 29.777L242.14 209.55H118.712l112.54 86.784H95.995l225.656 174.012-81.537-116.05 66.487.143 179.185 138.175-171.96-244.746h84.568L248.082 29.776H29.805z"/>
+      </svg>
+      HyperDjangoKit
+    </a>
 
-    <!-- Theme Switcher -->
+    {# Theme Switcher #}
     <div class="navbar-end">
-      <!-- Login button -->
       <label class="swap swap-rotate">
-        <!-- this hidden checkbox controls the state -->
         <input type="checkbox" data-theme-control="toggle" class="theme-controller" value="dark" />
-
-        <!-- sun icon -->
-        <svg
-          class="swap-off h-8 w-8 fill-current"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24">
-          <path
-            d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+        {# Sun icon #}
+        <svg class="swap-off h-8 w-8 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
         </svg>
-
-        <!-- moon icon -->
-        <svg
-          class="swap-on h-8 w-8 fill-current"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24">
-          <path
-            d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
+        {# Moon icon #}
+        <svg class="swap-on h-8 w-8 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
         </svg>
       </label>
     </div>
+  </header>
 
-    </header>
+  {# Messages #}
+  {% if messages %}
+    <div id="messages" class="toast toast-top toast-center z-[60]">
+      {% for message in messages %}
+        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-error{% elif message.tags == 'warning' %}alert-warning{% else %}alert-info{% endif %}">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+          </svg>
+          <span>{{ message }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
 
-    {# Messages #}
-    {% if messages %}
-      <div id="messages" class="toast toast-top toast-center z-[60]">
-        {% for message in messages %}
-          <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-error{% elif message.tags == 'warning' %}alert-warning{% else %}alert-info{% endif %}">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-            </svg>
-            <span>{{ message }}</span>
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %}
+  {# Main Content #}
+  <main class="flex-1 flex items-center justify-center px-4 py-8">
+    <div class="w-full max-w-md">
+      {% block body %}
+      {% endblock body %}
+    </div>
+  </main>
 
-    {# Main Content #}
-    <main class="flex-1 flex items-center justify-center px-4 py-8">
-      <div class="w-full max-w-md">
-        {% block body %}
-          {% block content %}
-          {% endblock content %}
-        {% endblock body %}
-      </div>
-    </main>
-
-    {# Footer Links #}
-    <footer class="p-4 text-center text-sm">
-      <div class="flex flex-wrap items-center justify-center gap-3">
-        {% if user.is_authenticated %}
-          {% url 'user_dashboard:index' as dashboard_url %}
-          {% if dashboard_url %}
-          <a href="{{ dashboard_url }}" class="link link-hover">{% trans "Dashboard" %}</a>
-          {% endif %}
-          {% url 'user_dashboard:account_profile' as profile_url %}
-          {% if profile_url %}
-          <a href="{{ profile_url }}" class="link link-hover">{% trans "Account Settings" %}</a>
-          {% endif %}
-          {% url 'account_logout' as logout_url %}
-          {% if logout_url %}
-          <a href="{{ logout_url }}" class="link link-hover">{% trans "Sign Out" %}</a>
-          {% endif %}
-        {% else %}
-          {% url 'account_login' as login_url %}
-          {% if login_url %}
-          <a href="{{ login_url }}" class="link link-hover">{% trans "Sign In" %}</a>
-          {% endif %}
-          {% url 'account_signup' as signup_url %}
-          {% if signup_url %}
-          <a href="{{ signup_url }}" class="link link-hover">{% trans "Sign Up" %}</a>
-          {% endif %}
-          <a href="#" class="link link-hover">{% trans "Help" %}</a>
+  {# Footer Links #}
+  <footer class="p-4 text-center text-sm">
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      {% if user.is_authenticated %}
+        {% url 'user_dashboard:index' as dashboard_url %}
+        {% if dashboard_url %}
+        <a href="{{ dashboard_url }}" class="link link-hover">{% trans "Dashboard" %}</a>
         {% endif %}
-      </div>
-    </footer>
+        {% url 'user_dashboard:account_profile' as profile_url %}
+        {% if profile_url %}
+        <a href="{{ profile_url }}" class="link link-hover">{% trans "Account Settings" %}</a>
+        {% endif %}
+        {% url 'account_logout' as logout_url %}
+        {% if logout_url %}
+        <a href="{{ logout_url }}" class="link link-hover">{% trans "Sign Out" %}</a>
+        {% endif %}
+      {% else %}
+        {% url 'account_login' as login_url %}
+        {% if login_url %}
+        <a href="{{ login_url }}" class="link link-hover">{% trans "Sign In" %}</a>
+        {% endif %}
+        {% url 'account_signup' as signup_url %}
+        {% if signup_url %}
+        <a href="{{ signup_url }}" class="link link-hover">{% trans "Sign Up" %}</a>
+        {% endif %}
+        <a href="#" class="link link-hover">{% trans "Help" %}</a>
+      {% endif %}
+    </div>
+  </footer>
+</div>
 
-    {% block extra_body %}
-    {% endblock extra_body %}
-
-    {# Auto-hide messages after 4 seconds #}
-    <script>
-      setTimeout(function() {
-        var messages = document.getElementById('messages');
-        if (messages) {messages.style.display = 'none';}
-      }, 4000);
-    </script>
-
-    {# Additional Scripts #}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplebar/6.2.7/simplebar.min.js"></script>
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/simplebar/6.2.7/simplebar.css" />
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="{% static 'js/app.js' %}"></script>
-    <script src="{% static 'js/toast.js' %}"></script>
-  </body>
-</html>
+{# Auto-hide messages after 4 seconds #}
+<script>
+  setTimeout(function() {
+    var messages = document.getElementById('messages');
+    if (messages) {messages.style.display = 'none';}
+  }, 4000);
+</script>
+{% endblock content %}

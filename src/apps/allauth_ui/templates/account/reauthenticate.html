@@ -1,12 +1,44 @@
-{% extends "account/reauthenticate.html" %}
-{% load i18n %}
-{% load allauth_ui %}
+{% extends "account/base_reauthenticate.html" %}
+{% load i18n widget_tweaks %}
+
 {% block reauthenticate_content %}
-    <div class="mt-5">{% blocktranslate %}Enter your password:{% endblocktranslate %}</div>
-    {% url 'account_reauthenticate' as action_url %}
-    {% trans "Confirm" as button_text %}
-    {% #form form=form url=action_url button_text=button_text %}
-    {{ redirect_field }}
-    {% csrf_token %}
-    {% /form %}
+<form method="post" action="{% url 'account_reauthenticate' %}" class="space-y-6">
+  {% csrf_token %}
+  {{ redirect_field }}
+
+  {# Non-field errors #}
+  {% for error in form.non_field_errors %}
+    <div role="alert" class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+      </svg>
+      <span>{{ error }}</span>
+    </div>
+  {% endfor %}
+
+  <p class="text-base-content/70 font-body">{% trans "Enter your password:" %}</p>
+
+  {# Password Field #}
+  <fieldset class="fieldset">
+    <label class="input input-lg w-full">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-[1em] opacity-50">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+      </svg>
+      <input type="password"
+             name="password"
+             placeholder="{% trans 'Password' %}"
+             required />
+    </label>
+    {% if form.password.errors %}
+      <div class="text-error text-sm mt-1">
+        {{ form.password.errors.0 }}
+      </div>
+    {% endif %}
+  </fieldset>
+
+  {# Submit Button #}
+  <button type="submit" class="btn btn-primary btn-lg btn-block font-body">
+    {% trans "Confirm" %}
+  </button>
+</form>
 {% endblock reauthenticate_content %}
