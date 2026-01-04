@@ -1,9 +1,9 @@
 {% extends "allauth/layouts/base.html" %}
-{% load i18n static allauth_ui %}
+{% load i18n static %}
 
 {% block head_title %}{% trans "Verification Sent" %}{% endblock %}
 
-{% block content %}
+{% block body %}
 <div class="space-y-8 text-center">
   {# Icon #}
   <div class="flex justify-center">
@@ -35,4 +35,4 @@
     {% trans "Back to Home" %}
   </a>
 </div>
-{% endblock %}
+{% endblock body %}

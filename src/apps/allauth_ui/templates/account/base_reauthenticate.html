@@ -1,23 +1,32 @@
-{% extends "account/base_reauthenticate.html" %}
+{% extends "allauth/layouts/base.html" %}
 {% load i18n %}
-{% load allauth_ui %}
-{% block content %}
-    {% trans "Confirm Access" as heading %}
-    {% blocktranslate asvar subheading %}
-    Please reauthenticate to safeguard your account.
-    {% endblocktranslate %}
-    {% #container heading=heading subheading=subheading %}
-    {% block reauthenticate_content %}{% endblock %}
-    {% if reauthentication_alternatives %}
-        <div class="divider divider-neutral"></div>
-        <h2 class="text-lg my-3">{% translate "Alternative options" %}</h2>
-        <ul>
-            {% for alt in reauthentication_alternatives %}
-                <li>
-                    <a class="link" href="{{ alt.url }}">{{ alt.description }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {% /container %}
-{% endblock content %}
+
+{% block head_title %}{% trans "Confirm Access" %}{% endblock %}
+
+{% block body %}
+<div class="space-y-8">
+  {# Header #}
+  <div class="text-center space-y-2">
+    <h1 class="text-3xl md:text-4xl font-bold font-title">{% trans "Confirm Access" %}</h1>
+    <p class="text-base-content/70 font-body">{% trans "Please reauthenticate to safeguard your account." %}</p>
+  </div>
+
+  {# Reauthentication Content #}
+  {% block reauthenticate_content %}{% endblock %}
+
+  {# Alternative Options #}
+  {% if reauthentication_alternatives %}
+    <div class="divider">{% trans "Or" %}</div>
+    <div class="space-y-2">
+      <h2 class="text-lg font-semibold font-title">{% trans "Alternative options" %}</h2>
+      <ul class="space-y-2">
+        {% for alt in reauthentication_alternatives %}
+          <li>
+            <a href="{{ alt.url }}" class="link link-primary">{{ alt.description }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+</div>
+{% endblock body %}

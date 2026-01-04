@@ -1,20 +1,80 @@
-{% extends "socialaccount/signup.html" %}
-{% load i18n %}
-{% load allauth_ui %}
-{% load allauth %}
-{% block content %}
-    {% trans "Sign Up" as heading %}
-    {% blocktrans asvar subheading with provider_name=account.get_provider.name site_name=site.name %}
-        You are about to use your {{provider_name}} account to login to {{site_name}}.
+{% extends "allauth/layouts/base.html" %}
+{% load i18n allauth widget_tweaks %}
+
+{% block head_title %}{% trans "Sign Up" %}{% endblock %}
+
+{% block body %}
+<div class="space-y-8">
+  {# Header #}
+  <div class="text-center space-y-2">
+    <h1 class="text-3xl md:text-4xl font-bold font-title">{% trans "Sign Up" %}</h1>
+    <p class="text-base-content/70 font-body">
+      {% blocktrans with provider_name=account.get_provider.name site_name=site.name %}
+        You are about to use your {{ provider_name }} account to login to {{ site_name }}.
         As a final step, please complete the following form:
-    {% endblocktrans %}
-    {% #container heading=heading subheading=subheading %}
-    {% trans "Continue" as button_text %}
-    {% url "socialaccount_signup" as url %}
-    {% trans "Sign Up" as button_text %}
-    {% #form form=form url=url button_text=button_text %}
+      {% endblocktrans %}
+    </p>
+  </div>
+
+  {# Form #}
+  <form method="post" action="{% url 'socialaccount_signup' %}" class="space-y-6">
     {% csrf_token %}
     {{ redirect_field }}
-    {% /form %}
-    {% /container %}
-{% endblock content %}
+
+    {# Non-field errors #}
+    {% for error in form.non_field_errors %}
+      <div role="alert" class="alert alert-error">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        <span>{{ error }}</span>
+      </div>
+    {% endfor %}
+
+    {# Email Field #}
+    {% if form.email %}
+    <fieldset class="fieldset">
+      <label class="input input-lg w-full">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-[1em] opacity-50">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+        </svg>
+        <input type="email"
+               name="email"
+               placeholder="{% trans 'Email address' %}"
+               {% if form.email.value %}value="{{ form.email.value }}"{% endif %} />
+      </label>
+      {% if form.email.errors %}
+        <div class="text-error text-sm mt-1">
+          {{ form.email.errors.0 }}
+        </div>
+      {% endif %}
+    </fieldset>
+    {% endif %}
+
+    {# Username Field #}
+    {% if form.username %}
+    <fieldset class="fieldset">
+      <label class="input input-lg w-full">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-[1em] opacity-50">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+        </svg>
+        <input type="text"
+               name="username"
+               placeholder="{% trans 'Username' %}"
+               {% if form.username.value %}value="{{ form.username.value }}"{% endif %} />
+      </label>
+      {% if form.username.errors %}
+        <div class="text-error text-sm mt-1">
+          {{ form.username.errors.0 }}
+        </div>
+      {% endif %}
+    </fieldset>
+    {% endif %}
+
+    {# Submit Button #}
+    <button type="submit" class="btn btn-primary btn-lg btn-block font-body">
+      {% trans "Sign Up" %}
+    </button>
+  </form>
+</div>
+{% endblock body %}

@@ -1,9 +1,9 @@
 {% extends "allauth/layouts/base.html" %}
-{% load i18n static allauth_ui %}
+{% load i18n static %}
 
 {% block head_title %}{% trans "Sign Out" %}{% endblock %}
 
-{% block content %}
+{% block body %}
 <div class="space-y-8">
   {# Header #}
   <div class="text-center space-y-2">
@@ -26,4 +26,4 @@
     </div>
   </form>
 </div>
-{% endblock %}
+{% endblock body %}

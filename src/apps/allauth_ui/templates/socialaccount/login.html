@@ -1,20 +1,50 @@
-{% extends "socialaccount/login.html" %}
-{% load i18n %}
-{% load allauth_ui %}
-{% load allauth %}
-{% block content %}
+{% extends "allauth/layouts/base.html" %}
+{% load i18n allauth %}
+
+{% block head_title %}
+  {% if process == "connect" %}
+    {% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}
+  {% else %}
+    {% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}
+  {% endif %}
+{% endblock %}
+
+{% block body %}
+<div class="space-y-8">
+  {# Header #}
+  <div class="text-center space-y-2">
     {% if process == "connect" %}
-        {% blocktrans asvar heading with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}
-        {% blocktrans asvar subheading with provider.name as provider %}You are about to connect a new third-party account from {{ provider }}.{% endblocktrans %}
+      <h1 class="text-3xl md:text-4xl font-bold font-title">
+        {% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}
+      </h1>
+      <p class="text-base-content/70 font-body">
+        {% blocktrans with provider.name as provider %}You are about to connect a new third-party account from {{ provider }}.{% endblocktrans %}
+      </p>
     {% else %}
-        {% blocktrans asvar heading with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}
-        {% blocktrans asvar subheading with provider.name as provider %}You are about to sign in using a third-party account from {{ provider }}.{% endblocktrans %}
+      <h1 class="text-3xl md:text-4xl font-bold font-title">
+        {% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}
+      </h1>
+      <p class="text-base-content/70 font-body">
+        {% blocktrans with provider.name as provider %}You are about to sign in using a third-party account from {{ provider }}.{% endblocktrans %}
+      </p>
     {% endif %}
-    {% #container heading=heading subheading=subheading %}
-    {% trans "Continue" as button_text %}
-    {% #form button_text=button_text %}
+  </div>
+
+  {# Confirmation Form #}
+  <form method="post" class="space-y-6">
     {% csrf_token %}
     {{ redirect_field }}
-    {% /form %}
-    {% /container %}
-{% endblock content %}
+
+    <button type="submit" class="btn btn-primary btn-lg btn-block font-body">
+      {% trans "Continue" %}
+    </button>
+  </form>
+
+  {# Cancel Link #}
+  <div class="text-center">
+    <a href="{% url 'account_login' %}" class="link link-primary font-body">
+      {% trans "Cancel" %}
+    </a>
+  </div>
+</div>
+{% endblock body %}

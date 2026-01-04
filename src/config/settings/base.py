@@ -53,7 +53,6 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount.providers.google",
     "allauth.usersessions",
     "widget_tweaks",
-    "slippers",
     "cookie_consent",
     "djstripe",
     "django_cotton.apps.SimpleAppConfig",
