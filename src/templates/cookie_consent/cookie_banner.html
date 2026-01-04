@@ -27,12 +27,12 @@
         <div class="flex flex-row gap-2 mt-4 md:mt-0">
           <form method="POST" action="{{ url_accept }}" @submit.prevent="show = false; $el.submit()">
             {% csrf_token %}
-            <input type="hidden" name="next" value="{% url 'subscriptions:index' %}">
+            <input type="hidden" name="next" value="{% url 'landing:index' %}">
             <button type="submit" class="btn btn-success btn-sm">{% translate "Accept All" %}</button>
           </form>
           <form method="POST" action="{{ url_decline }}" @submit.prevent="show = false; $el.submit()">
             {% csrf_token %}
-            <input type="hidden" name="next" value="{% url 'subscriptions:index' %}">
+            <input type="hidden" name="next" value="{% url 'landing:index' %}">
             <button type="submit" class="btn btn-error btn-sm">{% translate "Decline All" %}</button>
           </form>
         </div>  

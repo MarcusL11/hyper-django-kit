@@ -22,9 +22,9 @@
   --color-primary-content: #CECDC3;
   --color-secondary: #66B58E;
   --color-secondary-content: #CECDC3;
-  --color-accent: rgb(32, 94, 166);
+  --color-accent: #205EA6;
   --color-accent-content: #CECDC3;
-  --color-neutral: oklch(14% 0.005 285.823);
+  --color-neutral: #100F0F;
   --color-neutral-content: #CECDC3;
   --color-info: #4385BE;
   --color-info-content: #CECDC3;
@@ -57,9 +57,9 @@
   --color-primary-content: #CECDC3;
   --color-secondary: #66B58E;
   --color-secondary-content: #CECDC3;
-  --color-accent: rgb(32, 94, 166);
+  --color-accent: #205EA6;
   --color-accent-content: #CECDC3;
-  --color-neutral: oklch(14% 0.005 285.823);
+  --color-neutral: #100F0F;
   --color-neutral-content: #CECDC3;
   --color-info: #4385BE;
   --color-info-content: #CECDC3;

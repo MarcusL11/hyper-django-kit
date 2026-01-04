@@ -11,7 +11,7 @@
 
       {# Header with Logo and Theme Toggle #}
       <div class="flex items-center justify-between mb-8">
-        <a href="{% url 'subscriptions:index' %}">
+        <a href="{% url 'landing:index' %}">
           <img
             alt="logo-dark"
             class="hidden h-5.5 dark:inline"
@@ -136,7 +136,7 @@
       <div class="text-center mt-6 text-sm text-base-content/60">
         <p>
           {% trans "Need help?" %}
-          <a href="{% url 'subscriptions:index' %}" class="text-primary hover:underline">
+          <a href="{% url 'landing:index' %}" class="text-primary hover:underline">
             {% trans "Contact Support" %}
           </a>
         </p>

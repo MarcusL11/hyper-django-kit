@@ -8,78 +8,10 @@ import stripe
 from apps.core.payments.utils import get_or_create_customer
 import logging
 from djstripe.settings import djstripe_settings
-from djstripe.models import Subscription, Product
+from djstripe.models import Subscription
 import uuid
 
 logger = logging.getLogger(__name__)
-
-
-def index(request: HttpRequest):
-    """
-    Subscription landing page with pricing plans.
-    Fetches all active products with their prices for client-side toggle.
-
-    Uses Product-first approach:
-    1. Query active Products with prefetched prices
-    2. Attach custom metadata from METADATA_MAP
-    3. Create plan_data for each Product+Price combination
-    4. Separate into monthly and yearly lists
-    5. Include user's subscription context for UI awareness
-    """
-    plans_monthly = []
-    plans_yearly = []
-
-    # Fetch active products with their prices in one query
-    products = Product.objects.prefetch_related("prices").filter(active=True)
-
-    for product in products:
-        # Use subscription_metadata instead of app_metadata
-        metadata = product.subscription_metadata
-
-        # Skip products without subscription metadata (e.g., shop products)
-        if not metadata:
-            continue
-
-        for price in product.prices.all():
-            if not price.active:
-                continue
-
-            interval = price.recurring.get("interval") if price.recurring else None
-            if interval not in ["month", "year"]:
-                continue
-
-            plan_data = {
-                "order": metadata.order,
-                "price": price,
-                "metadata": metadata,
-            }
-
-            if interval == "month":
-                plans_monthly.append(plan_data)
-            elif interval == "year":
-                plans_yearly.append(plan_data)
-
-    # Sort by order (Starter=1, Standard=2, Premium=3)
-    plans_monthly.sort(key=lambda x: x["order"])
-    plans_yearly.sort(key=lambda x: x["order"])
-
-    # Get user's current subscription context for UI awareness
-    user_subscription = None
-    user_product_id = None
-
-    if request.user.is_authenticated:
-        user_subscription = request.user.active_subscription  # type: ignore
-        if user_subscription and user_subscription.product:
-            user_product_id = user_subscription.product.id
-
-    context = {
-        "plans_monthly": plans_monthly,
-        "plans_yearly": plans_yearly,
-        "user_subscription": user_subscription,
-        "user_product_id": user_product_id,
-    }
-
-    return render(request, "subscriptions/landing/index.html", context)
 
 
 @require_POST
@@ -106,7 +38,7 @@ def create_checkout_session(request: HttpRequest):
         logger.warning(
             f"create_checkout_session called without price_id by user {request.user.id}"  # type: ignore
         )
-        return redirect("subscriptions:index")
+        return redirect("landing:index")
 
     try:
         customer, created = get_or_create_customer(request.user)
@@ -149,7 +81,7 @@ def create_checkout_session(request: HttpRequest):
         logger.error(
             f"Unexpected error creating checkout session for user {request.user.id}: {e}"  # type: ignore
         )
-        return redirect("subscriptions:index")
+        return redirect("landing:index")
 
 
 @login_required
@@ -163,7 +95,7 @@ def subscription_confirm(request: HttpRequest):
 
     if not session_id:
         logger.error("subscription_confirm called without session_id")
-        return redirect("subscriptions:index")
+        return redirect("landing:index")
 
     try:
         # Retrieve the session ID from query parameters and fetch the session and its values
@@ -172,7 +104,7 @@ def subscription_confirm(request: HttpRequest):
 
         if not session.client_reference_id:
             logger.error(f"Session {session_id} missing client_reference_id")
-            return redirect("subscriptions:index")
+            return redirect("landing:index")
 
         client_reference_id = uuid.UUID(session.client_reference_id)
         subscription_holder = get_user_model().objects.get(id=client_reference_id)
@@ -182,7 +114,7 @@ def subscription_confirm(request: HttpRequest):
             logger.error(
                 f"User {request.user.id} attempted to access session for user {subscription_holder.id}"  # type: ignore
             )
-            return redirect("subscriptions:index")
+            return redirect("landing:index")
 
         # Retrieve the subscription and sync it to the database
         subscription = stripe.Subscription.retrieve(session.subscription)
@@ -209,15 +141,15 @@ def subscription_confirm(request: HttpRequest):
         logger.error(
             f"Stripe error in subscription_confirm for user {request.user.id}: {e}"
         )  # type: ignore
-        return redirect("subscriptions:index")
+        return redirect("landing:index")
     except (ValueError, get_user_model().DoesNotExist) as e:
         logger.error(f"Error processing session {session_id}: {e}")
-        return redirect("subscriptions:index")
+        return redirect("landing:index")
     except Exception as e:
         logger.error(
             f"Unexpected error in subscription_confirm for user {request.user.id}: {e}"
         )  # type: ignore
-        return redirect("subscriptions:index")
+        return redirect("landing:index")
 
 
 @login_required
@@ -235,7 +167,7 @@ def subscription_canceled(request: HttpRequest):
         "heading": "Checkout Canceled",
         "message": "No worries! Your checkout was canceled.",
         "submessage": "You can return to our pricing page anytime to complete your subscription.",
-        "primary_url": reverse("subscriptions:index") + "#pricing",
+        "primary_url": reverse("landing:index") + "#pricing",
         "primary_text": "View Pricing",
         "secondary_url": reverse("user_dashboard:index"),
         "secondary_text": "Go to Dashboard",
@@ -264,7 +196,7 @@ def billing_portal(request: HttpRequest):
         logger.warning(
             f"User {request.user.id} attempted to access billing portal without customer"  # type: ignore
         )
-        return redirect("subscriptions:index")
+        return redirect("landing:index")
 
     stripe.api_key = djstripe_settings.STRIPE_SECRET_KEY
 

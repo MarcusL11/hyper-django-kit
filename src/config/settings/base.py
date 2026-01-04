@@ -37,6 +37,7 @@ DJANGO_CORE_APPS = [
 LOCAL_APPS = [
     "apps.accounts",
     "apps.core",
+    "apps.landing",
     "apps.subscriptions",
     "apps.shop",
     "apps.user_dashboard",
