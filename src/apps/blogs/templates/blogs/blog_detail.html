@@ -1,5 +1,5 @@
 {% extends "blogs/base.html" %}
-{% load i18n cotton markdown_extras %}
+{% load cotton markdown_extras %}
 
 {% block title %}{{ blog.get_meta_title }} - {{ block.super }}{% endblock %}
 
@@ -36,21 +36,21 @@
   <div class="bg-warning text-warning-content py-3">
     <c-layout._container max_width="max-w-7xl" extra_class="flex items-center justify-center gap-2">
       <span class="iconify lucide--eye size-5"></span>
-      <span class="font-medium">{% trans "Preview Mode" %}</span>
-      <span class="text-sm">{% trans "This post is not yet published" %}</span>
+      <span class="font-medium">Preview Mode</span>
+      <span class="text-sm">This post is not yet published</span>
     </c-layout._container>
   </div>
   {% endif %}
 
   <!-- Article Header -->
-  <article class="py-12 md:py-20">
+  <article class="py-12 md:py-6">
     <c-layout._container max_width="max-w-4xl">
 
       <!-- Breadcrumbs -->
       <div class="breadcrumbs text-sm mb-4">
         <ul>
-          <li><a href="{% url 'landing:index' %}">{% trans "Home" %}</a></li>
-          <li><a href="{% url 'blogs:blog_list' %}">{% trans "Blog" %}</a></li>
+          <li><a href="{% url 'landing:index' %}">Home</a></li>
+          <li><a href="{% url 'blogs:blog_list' %}">Blog</a></li>
           <li class="text-base-content">{{ blog.title|truncatewords:5 }}</li>
         </ul>
       </div>
@@ -63,15 +63,7 @@
       <!-- Meta Info -->
       <div class="flex flex-wrap items-center gap-4 text-base-content mb-8">
         <!-- Author -->
-        <div class="flex items-center gap-2">
-          <div class="avatar placeholder">
-            <div class="bg-primary text-primary-content rounded-full w-10">
-              <span class="text-sm">{{ blog.author.get_full_name|default:blog.author.username|slice:":2"|upper }}</span>
-            </div>
-          </div>
-          <span class="font-medium text-base-content">{{ blog.author.get_full_name|default:blog.author.username }}</span>
-        </div>
-
+        <span class="font-medium text-base-content">Written by: {{ blog.author.get_full_name|default:blog.author.username }}</span>
         <span class="text-base-content/50" aria-hidden="true">|</span>
 
         <!-- Date -->
@@ -85,22 +77,23 @@
         <span class="text-base-content/50" aria-hidden="true">|</span>
         <div class="flex items-center gap-1">
           <span class="iconify lucide--clock size-4"></span>
-          <span>{{ word_count|reading_time }} {% trans "min read" %}</span>
+          <span>{{ word_count|reading_time }} min read</span>
         </div>
         {% endwith %}
-        <!-- Categories -->
-        {% if blog.categories.exists %}
-        <span class="text-base-content/50" aria-hidden="true">|</span>
-        <div class="flex item-center gap-1">
-          {% for category in blog.categories.all %}
-          <a href="{% url 'blogs:blog_category_list' slug=category.slug %}"
-            class="badge badge-primary badge-outline hover:badge-primary transition-colors">
-            {{ category.name }}
-          </a>
-          {% endfor %}
-        </div>
-        {% endif %}
+        
+      <!-- Tags / Categories Footer -->
+      {% if blog.categories.exists %}
+      <span class="text-base-content/50" aria-hidden="true">|</span>
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="text-base-content font-medium">Categories:</span>
+        {% for category in blog.categories.all %}
+        <a href="{% url 'blogs:blog_category_list' slug=category.slug %}"
+           class="btn btn-sm btn-ghost gap-1">
+          {{ category.name }}
+        </a>
+        {% endfor %}
       </div>
+      {% endif %}
 
       <!-- Featured Image -->
       {% if blog.featured_image %}
@@ -126,44 +119,25 @@
         {{ blog.content|markdown }}
       </div>
 
-      <!-- Tags / Categories Footer -->
-      {% if blog.categories.exists %}
-      <div class="divider my-12"></div>
-      <div class="flex flex-wrap items-center gap-3">
-        <span class="text-base-content font-medium">{% trans "Categories:" %}</span>
-        {% for category in blog.categories.all %}
-        <a href="{% url 'blogs:blog_category_list' slug=category.slug %}"
-           class="btn btn-sm btn-ghost gap-1">
-          <span class="iconify lucide--tag size-4"></span>
-          {{ category.name }}
-        </a>
-        {% endfor %}
-      </div>
-      {% endif %}
-
       <!-- Share Section -->
       <div class="divider my-12"></div>
       <div class="flex flex-wrap items-center justify-between gap-4">
-        <span class="text-base-content font-medium">{% trans "Share this post:" %}</span>
+        <span class="text-base-content font-medium">Share this post:</span>
         <div class="flex gap-2">
           <a href="https://twitter.com/intent/tweet?text={{ blog.title|urlencode }}&url={{ request.build_absolute_uri }}"
              target="_blank" rel="noopener noreferrer"
-             class="btn btn-circle btn-ghost">
-            <span class="iconify lucide--twitter size-5"></span>
+             class="btn btn-circle">
           </a>
           <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
              target="_blank" rel="noopener noreferrer"
-             class="btn btn-circle btn-ghost">
-            <span class="iconify lucide--facebook size-5"></span>
+             class="btn btn-circle">
           </a>
           <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ blog.title|urlencode }}"
              target="_blank" rel="noopener noreferrer"
-             class="btn btn-circle btn-ghost">
-            <span class="iconify lucide--linkedin size-5"></span>
+             class="btn btn-circle">
           </a>
           <button onclick="navigator.clipboard.writeText('{{ request.build_absolute_uri }}')"
-                  class="btn btn-circle btn-ghost tooltip" data-tip="{% trans 'Copy link' %}">
-            <span class="iconify lucide--link size-5"></span>
+                  class="btn btn-circle tooltip" data-tip="Copy link">
           </button>
         </div>
       </div>
@@ -171,72 +145,10 @@
     </c-layout._container>
   </article>
 
-  <!-- Related Posts -->
-  {% if related_blogs %}
-  <c-layout._section bg_class="bg-base-200/50" py_class="py-12" max_width="max-w-7xl">
-    <h2 class="text-2xl md:text-3xl font-heading font-bold mb-8 flex items-center gap-2">
-      <span class="iconify lucide--sparkles size-6 text-primary"></span>
-      {% trans "Related Posts" %}
-    </h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {% for post in related_blogs %}
-      <c-blogs._blog_card :post="post" />
-      {% endfor %}
-    </div>
-  </c-layout._section>
-  {% endif %}
-
-  <!-- Recent Posts Sidebar (shown below on mobile) -->
-  {% if recent_blogs %}
-  <c-layout._section py_class="py-12" max_width="max-w-7xl">
-    <h2 class="text-2xl md:text-3xl font-heading font-bold mb-8 flex items-center gap-2">
-      <span class="iconify lucide--clock size-6 text-secondary"></span>
-      {% trans "Recent Posts" %}
-    </h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {% for post in recent_blogs %}
-      {% if post.id != blog.id %}
-      <a href="{% url 'blogs:blog_detail' slug=post.slug %}"
-         class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow group">
-        {% if post.featured_image %}
-        <figure class="aspect-video overflow-hidden">
-          <img src="{{ post.featured_image.url }}"
-               alt="{{ post.title }}"
-               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-        </figure>
-        {% endif %}
-        <div class="card-body p-4">
-          <h3 class="card-title text-base font-heading line-clamp-2 group-hover:text-primary transition-colors">
-            {{ post.title }}
-          </h3>
-          <p class="text-sm text-base-content">{{ post.date|date:"M j, Y" }}</p>
-        </div>
-      </a>
-      {% endif %}
-      {% endfor %}
-    </div>
-  </c-layout._section>
-  {% endif %}
-
   <!-- Back to Blog -->
   <c-layout._section py_class="py-8" max_width="max-w-4xl">
     <a href="{% url 'blogs:blog_list' %}" class="btn btn-outline gap-2">
-      <span class="iconify lucide--arrow-left size-4"></span>
-      {% trans "Back to Blog" %}
-    </a>
-  </c-layout._section>
-
-  <!-- Call to Action Section -->
-  <c-layout._section py_class="py-12 md:py-16" bg_class="bg-gradient-to-r from-primary to-secondary" max_width="max-w-4xl" extra_class="text-center">
-    <h2 class="text-3xl md:text-4xl font-heading font-bold mb-4 text-primary-content">
-      {% trans "Ready to Create Your Story?" %}
-    </h2>
-    <p class="text-lg text-primary-content/90 mb-8 font-body">
-      {% trans "Start creating personalized children's books that will be treasured for generations." %}
-    </p>
-    <a href="{% url 'shop:product_list' %}" class="btn btn-neutral btn-lg gap-2 shadow-xl">
-      <span class="iconify lucide--sparkles size-5"></span>
-      {% trans "Create Your Book" %}
+      Back to Blog
     </a>
   </c-layout._section>
 
