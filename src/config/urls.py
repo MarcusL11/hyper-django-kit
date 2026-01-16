@@ -7,12 +7,15 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("secret-admin-url/", admin.site.urls),
     path("", include("apps.landing.urls", namespace="landing")),
-    path("subscriptions/", include("apps.subscriptions.urls", namespace="subscriptions")),
+    path(
+        "subscriptions/", include("apps.subscriptions.urls", namespace="subscriptions")
+    ),
     path("accounts/", include("allauth.urls")),
     path("cookies/", include("cookie_consent.urls")),
     path("stripe/", include("djstripe.urls", namespace="djstripe")),
     path("shop/", include("apps.shop.urls", namespace="shop")),
     path("blogs/", include("apps.blogs.urls", namespace="blogs")),
+    path("markdownx/", include("markdownx.urls")),
     path(
         "user-dashboard/",
         include("apps.user_dashboard.urls", namespace="user_dashboard"),

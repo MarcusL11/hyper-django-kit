@@ -3,7 +3,7 @@ Product Filter & Sort Sidebar
 Used in base_product_list.html drawer
 {% endcomment %}
 
-{# Header with close button #}
+<!-- Header with close button -->
 <div class="bg-base-200 flex h-16 min-h-16 items-center justify-between px-4 sm:px-6 border-b border-base-300">
   <h2 class="text-lg sm:text-xl font-semibold">Filter & Sort</h2>
   <label
@@ -16,12 +16,12 @@ Used in base_product_list.html drawer
   </label>
 </div>
 
-{# Filter & Sort Controls - Standard Django Form #}
+<!-- Filter & Sort Controls - Standard Django Form -->
 <div class="p-4 sm:p-6 flex flex-col gap-6">
 
   <form method="GET" action="{% url 'shop:product_list' %}" class="space-y-6">
 
-    {# Category Filter #}
+    <!-- Category Filter -->
     <div class="form-control">
       <label class="label">
         <span class="label-text font-semibold text-base">Category</span>
@@ -41,7 +41,7 @@ Used in base_product_list.html drawer
 
     <div class="divider my-0"></div>
 
-    {# Sort Dropdown #}
+    <!-- Sort Dropdown -->
     <div class="form-control">
       <label class="label">
         <span class="label-text font-semibold text-base">Sort By</span>
@@ -64,9 +64,9 @@ Used in base_product_list.html drawer
 
     <div class="divider my-2"></div>
 
-    {# Action Buttons #}
+    <!-- Action Buttons -->
     <div class="space-y-3">
-      {# Apply Filters Button #}
+      <!-- Apply Filters Button -->
       <button type="submit" class="btn btn-primary btn-block gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
@@ -74,7 +74,7 @@ Used in base_product_list.html drawer
         Apply Filters
       </button>
 
-      {# Clear Filters Button #}
+      <!-- Clear Filters Button -->
       <a href="{% url 'shop:product_list' %}" class="btn btn-outline btn-block gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />

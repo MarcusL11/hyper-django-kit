@@ -1,0 +1,36 @@
+<c-vars
+  id=""
+  bg_class="bg-base-100"
+  py_class="py-12 md:py-16 lg:py-20"
+  max_width=""
+  extra_class=""
+  aria_label=""
+/>
+{% comment %}
+  Section Component
+
+  Full-width section with background color, vertical padding, and inner container.
+  Use this for major page sections with distinct backgrounds.
+
+  Props:
+    - id: Section ID for anchor links (e.g., "features", "pricing")
+    - bg_class: Background color class (default: "bg-base-100")
+    - py_class: Vertical padding classes (default: "py-12 md:py-16 lg:py-20")
+    - max_width: Override container max-width (e.g., "max-w-4xl")
+    - extra_class: Additional CSS classes for the section
+    - aria_label: Accessibility label for the section
+
+  Usage:
+    <c-layout._section>Content here</c-layout._section>
+    <c-layout._section id="features" bg_class="bg-base-200">Features content</c-layout._section>
+    <c-layout._section max_width="max-w-4xl" py_class="py-8 md:py-12">Narrow section</c-layout._section>
+{% endcomment %}
+<section
+  {% if id %}id="{{ id }}"{% endif %}
+  class="{{ bg_class }} {{ py_class }} {{ extra_class }}"
+  {% if aria_label %}aria-label="{{ aria_label }}"{% endif %}
+>
+  <div class="{% if max_width %}{{ max_width }}{% else %}container{% endif %} mx-auto px-4 sm:px-6 lg:px-8">
+    {{ slot }}
+  </div>
+</section>

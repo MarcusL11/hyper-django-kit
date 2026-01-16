@@ -26,13 +26,13 @@
     </div>
   </div>
 
-  {# Main Profile Form #}
+  <!-- Main Profile Form -->
   <div class="card bg-base-200 card-border shadow-md shrink-0">
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="card-body space-y-8 sm:space-y-12 p-6 sm:p-8">
 
-        {# User Profile Section #}
+        <!-- User Profile Section -->
         <div class="grid grid-cols-1 gap-6 xl:grid-cols-5 xl:gap-8">
           <div class="xl:col-span-2">
             <div class="flex items-center gap-2">
@@ -47,7 +47,7 @@
           </div>
 
           <div class="xl:col-span-3">
-            {# Avatar Display - Centered #}
+            <!-- Avatar Display - Centered -->
             <div class="flex flex-col items-center gap-3 mb-6">
               <div id="profile-picture-container" class="avatar">
                 <div class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
@@ -60,19 +60,19 @@
               </div>
 
               <div class="flex gap-2">
-                {# Upload Button - Opens Modal #}
+                <!-- Upload Button - Opens Modal -->
                 <button type="button"
                         class="btn btn-sm btn-primary"
                         onclick="upload_modal.showModal()">
                   Change
                 </button>
-                {# Delete Button - Only show if image exists #}
+                <!-- Delete Button - Only show if image exists -->
               </div>
             </div>
 
-            {# Name Fields - Full Width Below Avatar #}
+            <!-- Name Fields - Full Width Below Avatar -->
             <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
-              {# First Name Field #}
+              <!-- First Name Field -->
               <div class="form-control">
                 <label class="label" for="{{ profile_form.first_name.id_for_label }}">
                   <span class="label-text">{{ profile_form.first_name.label }}</span>
@@ -90,7 +90,7 @@
                 {% endif %}
               </div>
 
-              {# Last Name Field #}
+              <!-- Last Name Field -->
               <div class="form-control">
                 <label class="label" for="{{ profile_form.last_name.id_for_label }}">
                   <span class="label-text">{{ profile_form.last_name.label }}</span>
@@ -111,8 +111,8 @@
           </div>
         </div>
 
-        {# Notification Section #}
-        {# TODO: Notifications will need to be managed, this is just for show based on user preferences #}
+        <!-- Notification Section -->
+        <!-- TODO: Notifications will need to be managed, this is just for show based on user preferences -->
         <div class="grid grid-cols-1 gap-6 xl:grid-cols-5 xl:gap-8">
           <div class="xl:col-span-2">
             <div class="flex items-center gap-2">
@@ -150,7 +150,7 @@
           </div>
         </div>
 
-        {# Action Buttons #}
+        <!-- Action Buttons -->
         <div class="flex justify-end gap-3">
           <button type="submit" class="btn btn-sm btn-primary">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
@@ -174,7 +174,7 @@
       <form method="post" enctype="multipart/form-data" class="space-y-6 mb-4">
         {% csrf_token %}
 
-        {# File Input #}
+        <!-- File Input -->
         <div class="form-control w-full space-y-4">
           <label class="label">
             <span class="label-text">Select Image</span>

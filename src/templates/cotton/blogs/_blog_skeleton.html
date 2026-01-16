@@ -1,0 +1,41 @@
+<c-vars featured="False" />
+
+<!-- Skeleton Loading Card -->
+<div class="card bg-base-100 shadow-xl border border-base-300 h-full flex flex-col overflow-hidden">
+
+  <!-- Skeleton Image -->
+  <div class="{% if featured %}aspect-[16/9]{% else %}aspect-[4/3]{% endif %} skeleton bg-base-200"></div>
+
+  <!-- Skeleton Content -->
+  <div class="card-body p-4 {% if featured %}md:p-6{% endif %} flex flex-col gap-3">
+
+    <!-- Skeleton Badges and Date -->
+    <div class="flex gap-2 items-center">
+      <div class="skeleton h-5 w-16"></div>
+      <div class="skeleton h-5 w-16"></div>
+      <div class="skeleton h-3 w-20 ml-auto"></div>
+    </div>
+
+    <!-- Skeleton Title -->
+    <div class="skeleton h-6 w-full"></div>
+    <div class="skeleton h-6 w-3/4"></div>
+
+    <!-- Skeleton Summary -->
+    <div class="skeleton h-4 w-full mt-2"></div>
+    <div class="skeleton h-4 w-full"></div>
+    {% if not featured %}
+      <div class="skeleton h-4 w-2/3"></div>
+    {% else %}
+      <div class="skeleton h-4 w-full"></div>
+    {% endif %}
+
+    <!-- Skeleton Footer -->
+    <div class="flex justify-between items-center mt-auto pt-4">
+      <div class="flex items-center gap-2">
+        <div class="skeleton w-8 h-8 rounded-full shrink-0"></div>
+        <div class="skeleton h-4 w-24"></div>
+      </div>
+      <div class="skeleton h-8 w-24"></div>
+    </div>
+  </div>
+</div>

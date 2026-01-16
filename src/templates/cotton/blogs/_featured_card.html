@@ -1,0 +1,95 @@
+<c-vars
+  post
+/>
+
+
+<article
+  class="card lg:card-side bg-base-100 shadow-xl hover:shadow-2xl border border-base-300 group overflow-hidden hover:shadow-primary/10 transition-all duration-300"
+  aria-label="Featured blog post: {{ post.title }}"
+>
+
+  <!-- Featured Image Section -->
+  {% if post.featured_image %}
+  <figure class="relative lg:w-2/5 h-64 lg:h-auto overflow-hidden">
+    <img
+        src="{{ post.featured_image.url }}"
+        alt="{{ post.title }}"
+        class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700"
+        loading="lazy"
+        />
+  </figure>
+  {% endif %}
+
+  <!-- Content Section -->
+  <div class="card-body lg:w-3/5 p-5 lg:p-6 flex flex-col justify-center">
+
+    <!-- Category Badges -->
+    {% if post.categories.all %}
+    <div class="flex flex-wrap gap-2 mb-4">
+      {% for category in post.categories.all %}
+        <div class="badge badge-secondary">{{ category.name }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Title -->
+    <h2 class="font-heading text-2xl lg:text-3xl font-bold mb-4 group-hover:text-primary transition-colors">
+      <a href="{% url 'blogs:blog_detail' slug=post.slug %}" class="hover:underline">
+        {{ post.title }}
+      </a>
+    </h2>
+
+    <!-- Summary -->
+    {% if post.summary %}
+      <p class="text-base-content font-body text-base line-clamp-3 lg:line-clamp-4 mb-6 flex-grow">
+        {{ post.summary }}
+      </p>
+    {% endif %}
+
+    <!-- Author and CTA -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-auto">
+
+      <!-- Author Section -->
+      {% if post.author %}
+      <div class="flex items-center gap-3">
+        <div class="avatar placeholder">
+          <div class="bg-primary text-primary-content w-10 rounded-full">
+            <span class="text-sm font-medium">
+              {% if post.author.first_name %}
+                {{ post.author.first_name|slice:":1"|upper }}{% if post.author.last_name %}{{ post.author.last_name|slice:":1"|upper }}{% endif %}
+              {% else %}
+                {{ post.author.username|slice:":1"|upper }}
+              {% endif %}
+            </span>
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <p class="font-medium text-base-content text-sm">
+            {{ post.author.get_full_name|default:post.author.username }}
+          </p>
+          {% if post.date %}
+          <div class="text-base-content text-xs flex items-center gap-1">
+            <span class="iconify lucide--calendar size-3"></span>
+            <time datetime="{{ post.date|date:'Y-m-d' }}">
+              {{ post.date|date:"M d, Y" }}
+            </time>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- CTA Button -->
+      <a
+        href="{% url 'blogs:blog_detail' slug=post.slug %}"
+        class="btn btn-primary gap-2"
+        aria-label="Read article: {{ post.title }}"
+      >
+        Read Blog
+        <span class="iconify lucide--arrow-right size-4"></span>
+      </a>
+    </div>
+
+  </div>
+
+</article>

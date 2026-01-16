@@ -1,0 +1,125 @@
+{% load static i18n %}
+<c-vars
+  variant="default"
+  logo_text="HyperDjangoKit"
+  logo_url="/"
+  show_theme_toggle="True"
+  show_auth_buttons="True"
+  cta_text=""
+  cta_url=""
+  cta_icon=""
+  show_cart="False"
+  extra_class=""
+/>
+{% comment %}
+  Navbar Component
+
+  Reusable navigation bar with theme toggle, auth buttons, and optional CTA.
+
+  Props:
+    - variant: Style variant ("default", "blog", "transparent")
+    - logo_text: Text to display next to logo (default: "HyperDjangoKit")
+    - logo_url: URL for logo link (default: "/")
+    - show_theme_toggle: Show theme switcher (default: True)
+    - show_auth_buttons: Show login/dashboard buttons (default: True)
+    - cta_text: Call-to-action button text (optional)
+    - cta_url: Call-to-action button URL (optional)
+    - cta_icon: Icon class for CTA button (optional)
+    - show_cart: Show cart icon (default: False)
+    - extra_class: Additional CSS classes
+
+  Usage:
+    <c-layout.navbar />
+    <c-layout.navbar variant="blog" cta_text="Get Started" cta_url="/signup" />
+{% endcomment %}
+<nav
+  role="navigation"
+  aria-label="Main navigation"
+  class="navbar {% if variant == 'transparent' %}bg-transparent{% else %}bg-base-100 border-b border-base-300{% endif %} px-4 sm:px-6 lg:px-8 {{ extra_class }}"
+>
+  <div class="navbar-start">
+    <!-- Mobile Menu -->
+    <div class="dropdown lg:hidden">
+      <div tabindex="0" role="button" class="btn btn-ghost" aria-label="Open menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </div>
+      <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[50] mt-3 w-52 p-2 shadow-lg">
+        {{ slot }}
+        {% if show_auth_buttons %}
+          <li class="mt-2">
+            {% if request.user.is_authenticated %}
+              <a href="{% url 'user_dashboard:index' %}" class="btn btn-ghost w-full justify-start">{% trans "Dashboard" %}</a>
+            {% else %}
+              <a href="{% url 'account_login' %}" class="btn btn-ghost w-full justify-start">{% trans "Sign In" %}</a>
+            {% endif %}
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <!-- Logo -->
+    <a href="{{ logo_url }}" class="btn btn-ghost text-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 512 512" class="theme-logo">
+        <path d="M29.805 29.777L242.14 209.55H118.712l112.54 86.784H95.995l225.656 174.012-81.537-116.05 66.487.143 179.185 138.175-171.96-244.746h84.568L248.082 29.776H29.805z"/>
+      </svg>
+      <span class="hidden sm:inline">{{ logo_text }}</span>
+    </a>
+  </div>
+
+  <!-- Desktop Menu -->
+  <div class="navbar-center hidden lg:flex">
+    <ul class="menu menu-horizontal px-1 gap-1">
+      {{ slot }}
+    </ul>
+  </div>
+
+  <!-- Right Side Actions -->
+  <div class="navbar-end gap-2">
+    <!-- CTA Button -->
+    {% if cta_text and cta_url %}
+      <a href="{{ cta_url }}" class="btn btn-primary hidden sm:inline-flex">
+        {% if cta_icon %}
+          <span class="iconify {{ cta_icon }}"></span>
+        {% endif %}
+        {{ cta_text }}
+      </a>
+    {% endif %}
+
+    <!-- Cart Icon -->
+    {% if show_cart == "True" %}
+      <a href="{% url 'shop:cart_detail' %}" class="btn btn-ghost btn-circle" aria-label="Shopping cart">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+        </svg>
+      </a>
+    {% endif %}
+
+    <!-- Auth Buttons -->
+    {% if show_auth_buttons %}
+      <div class="hidden lg:flex">
+        {% if request.user.is_authenticated %}
+          <a href="{% url 'user_dashboard:index' %}" class="btn btn-ghost">{% trans "Dashboard" %}</a>
+        {% else %}
+          <a href="{% url 'account_login' %}" class="btn btn-ghost">{% trans "Sign In" %}</a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <!-- Theme Toggle -->
+    {% if show_theme_toggle == "True" %}
+      <label class="swap swap-rotate btn btn-ghost btn-circle">
+        <input type="checkbox" data-theme-control="toggle" class="theme-controller" value="dark" />
+        <!-- Sun icon -->
+        <svg class="swap-off h-6 w-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+        </svg>
+        <!-- Moon icon -->
+        <svg class="swap-on h-6 w-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
+        </svg>
+      </label>
+    {% endif %}
+  </div>
+</nav>

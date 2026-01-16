@@ -3,20 +3,20 @@
 
 {% block head_title %}{% trans "Sign Up" %}{% endblock %}
 
-{% block body %}
+{% block auth_body %}
 <div class="space-y-8">
-  {# Header #}
+  <!-- Header -->
   <div class="text-center space-y-2">
     <h1 class="text-3xl md:text-4xl font-bold font-title">{% trans "Create Account" %}</h1>
     <p class="text-base-content/70 font-body">{% trans "Start your journey with us" %}</p>
   </div>
 
-  {# Form #}
+  <!-- Form -->
   {% if not SOCIALACCOUNT_ONLY %}
     <form method="post" action="{% url 'account_signup' %}" class="space-y-6">
       {% csrf_token %}
 
-      {# Non-field errors #}
+      <!-- Non-field errors -->
       {% for error in form.non_field_errors %}
         <div role="alert" class="alert alert-error">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -26,7 +26,7 @@
         </div>
       {% endfor %}
 
-      {# Email Field #}
+      <!-- Email Field -->
       <fieldset class="fieldset">
         <label class="input input-lg w-full">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-[1em] opacity-50">
@@ -45,7 +45,7 @@
         {% endif %}
       </fieldset>
 
-      {# Username Field (if required) #}
+      <!-- Username Field (if required) -->
       {% if form.username %}
       <fieldset class="fieldset">
         <label class="input input-lg w-full">
@@ -66,7 +66,7 @@
       </fieldset>
       {% endif %}
 
-      {# Password Field #}
+      <!-- Password Field -->
       <fieldset class="fieldset">
         <label class="input input-lg w-full">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-[1em] opacity-50">
@@ -87,7 +87,7 @@
         {% endif %}
       </fieldset>
 
-      {# Confirm Password Field (if required) #}
+      <!-- Confirm Password Field (if required) -->
       {% if form.password2 %}
       <fieldset class="fieldset">
         <label class="input input-lg w-full">
@@ -107,25 +107,25 @@
       </fieldset>
       {% endif %}
 
-      {# Hidden fields #}
+      <!-- Hidden fields -->
       {{ redirect_field }}
 
-      {# Submit Button #}
+      <!-- Submit Button -->
       <button type="submit" class="btn btn-primary btn-lg btn-block font-body">
         {% trans "Sign Up" %}
       </button>
     </form>
   {% endif %}
 
-  {# Divider #}
+  <!-- Divider -->
   {% if SOCIALACCOUNT_ENABLED %}
     <div class="divider font-body">{% trans "OR" %}</div>
 
-    {# Social Signup #}
+    <!-- Social Signup -->
     {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
   {% endif %}
 
-  {# Login link #}
+  <!-- Login link -->
   {% if not SOCIALACCOUNT_ONLY %}
     <div class="text-center text-sm font-body">
       {% trans "Already have an account?" %}
@@ -135,4 +135,4 @@
     </div>
   {% endif %}
 </div>
-{% endblock body %}
+{% endblock auth_body %}

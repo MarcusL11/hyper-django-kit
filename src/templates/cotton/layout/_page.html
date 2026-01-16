@@ -1,0 +1,27 @@
+<c-vars
+  navbar_offset="False"
+  min_height=""
+  bg_class="bg-base-100"
+  extra_class=""
+/>
+{% comment %}
+  Page Component
+
+  Page-level wrapper with optional navbar offset and minimum height.
+  Use this as the main content wrapper within base templates.
+
+  Props:
+    - navbar_offset: Add top padding for fixed navbar (default: False)
+                     When True, adds pt-16 to account for fixed navbar height
+    - min_height: Minimum height class (e.g., "min-h-screen")
+    - bg_class: Background color class (default: "bg-base-100")
+    - extra_class: Additional CSS classes
+
+  Usage:
+    <c-layout._page>Page content</c-layout._page>
+    <c-layout._page navbar_offset="True" min_height="min-h-screen">Full page with navbar</c-layout._page>
+    <c-layout._page bg_class="bg-base-200">Custom background</c-layout._page>
+{% endcomment %}
+<div class="{{ bg_class }} {{ min_height }} {% if navbar_offset == 'True' %}pt-16{% endif %} {{ extra_class }}">
+  {{ slot }}
+</div>

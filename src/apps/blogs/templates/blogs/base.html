@@ -1,0 +1,33 @@
+{% extends "base/_root.html" %}
+{% load static i18n cotton %}
+
+{% block title %}{% trans "Blog" %} - {% block blog_title %}{% endblock blog_title %}{% endblock title %}
+
+{% block body %}
+  <!-- Background image - fixed position, behind all content -->
+  <div class="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+       style="background-image: url('{% static 'images/landing/bookids-background-peach.png' %}');">
+  </div>
+
+  <!-- Header/Navbar - overridable by child templates -->
+  {% block header %}
+    <c-layout.navbar logo_url="{% url 'landing:index' %}">
+      <li><a href="{% url 'landing:index' %}">{% trans "Home" %}</a></li>
+      <li><a href="{% url 'blogs:blog_list' %}">{% trans "Blog" %}</a></li>
+    </c-layout.navbar>
+  {% endblock header %}
+
+  <!-- Main content area -->
+  <main>
+    {% block content %}{% endblock content %}
+  </main>
+
+  <!-- Footer - overridable by child templates -->
+  {% block footer %}
+    <c-layout.footer variant="default" show_social="True" />
+  {% endblock footer %}
+{% endblock body %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/pages/landing.js' %}"></script>
+{% endblock extra_scripts %}

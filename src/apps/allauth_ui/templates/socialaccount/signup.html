@@ -3,9 +3,9 @@
 
 {% block head_title %}{% trans "Sign Up" %}{% endblock %}
 
-{% block body %}
+{% block auth_body %}
 <div class="space-y-8">
-  {# Header #}
+  <!-- Header -->
   <div class="text-center space-y-2">
     <h1 class="text-3xl md:text-4xl font-bold font-title">{% trans "Sign Up" %}</h1>
     <p class="text-base-content/70 font-body">
@@ -16,12 +16,12 @@
     </p>
   </div>
 
-  {# Form #}
+  <!-- Form -->
   <form method="post" action="{% url 'socialaccount_signup' %}" class="space-y-6">
     {% csrf_token %}
     {{ redirect_field }}
 
-    {# Non-field errors #}
+    <!-- Non-field errors -->
     {% for error in form.non_field_errors %}
       <div role="alert" class="alert alert-error">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -31,7 +31,7 @@
       </div>
     {% endfor %}
 
-    {# Email Field #}
+    <!-- Email Field -->
     {% if form.email %}
     <fieldset class="fieldset">
       <label class="input input-lg w-full">
@@ -51,7 +51,7 @@
     </fieldset>
     {% endif %}
 
-    {# Username Field #}
+    <!-- Username Field -->
     {% if form.username %}
     <fieldset class="fieldset">
       <label class="input input-lg w-full">
@@ -71,10 +71,10 @@
     </fieldset>
     {% endif %}
 
-    {# Submit Button #}
+    <!-- Submit Button -->
     <button type="submit" class="btn btn-primary btn-lg btn-block font-body">
       {% trans "Sign Up" %}
     </button>
   </form>
 </div>
-{% endblock body %}
+{% endblock auth_body %}

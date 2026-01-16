@@ -58,6 +58,7 @@ THIRD_PARTY_APPS = [
     "django_cotton.apps.SimpleAppConfig",
     "template_partials.apps.SimpleAppConfig",
     "tailwind",  # Tailwind CSS integration liked to the theme app
+    "markdownx",
 ]
 
 

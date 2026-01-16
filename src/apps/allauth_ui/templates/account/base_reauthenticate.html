@@ -3,18 +3,18 @@
 
 {% block head_title %}{% trans "Confirm Access" %}{% endblock %}
 
-{% block body %}
+{% block auth_body %}
 <div class="space-y-8">
-  {# Header #}
+  <!-- Header -->
   <div class="text-center space-y-2">
     <h1 class="text-3xl md:text-4xl font-bold font-title">{% trans "Confirm Access" %}</h1>
     <p class="text-base-content/70 font-body">{% trans "Please reauthenticate to safeguard your account." %}</p>
   </div>
 
-  {# Reauthentication Content #}
+  <!-- Reauthentication Content -->
   {% block reauthenticate_content %}{% endblock %}
 
-  {# Alternative Options #}
+  <!-- Alternative Options -->
   {% if reauthentication_alternatives %}
     <div class="divider">{% trans "Or" %}</div>
     <div class="space-y-2">
@@ -29,4 +29,4 @@
     </div>
   {% endif %}
 </div>
-{% endblock body %}
+{% endblock auth_body %}

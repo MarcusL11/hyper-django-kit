@@ -1,0 +1,22 @@
+<c-vars
+  max_width=""
+  extra_class=""
+/>
+{% comment %}
+  Container Component
+
+  Basic container wrapper with responsive horizontal padding.
+  Uses either Tailwind's container class OR a custom max-width.
+
+  Props:
+    - max_width: Override max-width (e.g., "max-w-4xl", "max-w-6xl", "max-w-7xl")
+                 If not provided, uses Tailwind's default container behavior
+    - extra_class: Additional CSS classes
+
+  Usage:
+    <c-layout._container>Content here</c-layout._container>
+    <c-layout._container max_width="max-w-4xl">Narrower content</c-layout._container>
+{% endcomment %}
+<div class="{% if max_width %}{{ max_width }}{% else %}container{% endif %} mx-auto px-4 sm:px-6 lg:px-8 {{ extra_class }}">
+  {{ slot }}
+</div>

@@ -1,215 +1,190 @@
-{% load static tailwind_tags cotton partials %}
-<!doctype html>
-<html lang="en" class="group/html">
-  <head>
-    <title>HyperDjangoKit - Shop</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-        rel="shortcut icon"
-        href="{% static 'images/favicon-dark.png' %}"
-        media="(prefers-color-scheme: dark)" />
-    <link
-        rel="shortcut icon"
-        href="{% static 'images/favicon-light.png' %}"
-        media="(prefers-color-scheme: light)" />
-    {# Google Fonts - Space Mono & Space Grotesk #}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    {# Main CSS #}
-    {% tailwind_css %}
-    <link rel="stylesheet" href="{% static 'assets/app.css' %}" />
-    {# Custom CSS - Must load AFTER Tailwind to override #}
-    <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
-    {# Custom JS #}
-    <script src="{% static 'js/theme-controller.js' %}"></script>
-    <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"></script>
-    {% block css_head %}{% endblock css_head %}
-  </head>
+{% extends "base/_root.html" %}
+{% load static i18n cotton partials %}
 
-  <body>
-    <!--  Start: Layout - Main -->
-    <div class="size-full">
-      <div class="flex">
-        <div class="flex min-h-screen min-w-0 grow flex-col">
-          <!--  Start: Layout - Topbar -->
-          <div class="navbar bg-base-100 border-b border-base-300 px-4 sm:px-6 lg:px-10">
-            <div class="flex-1">
-              <a href="{% url 'landing:index' %}" class="btn btn-ghost text-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 512 512" class="theme-logo">
-                  <path d="M29.805 29.777L242.14 209.55H118.712l112.54 86.784H95.995l225.656 174.012-81.537-116.05 66.487.143 179.185 138.175-171.96-244.746h84.568L248.082 29.776H29.805z"/>
-                </svg>
-                HyperDjangoKit
-              </a>
-            </div>
+{% block body %}
+<!--  Start: Layout - Main -->
+<div class="size-full">
+  <div class="flex">
+    <div class="flex min-h-screen min-w-0 grow flex-col">
+      <!--  Start: Layout - Topbar -->
+      <div class="navbar bg-base-100 border-b border-base-300 px-4 sm:px-6 lg:px-10">
+        <div class="flex-1">
+          <a href="{% url 'landing:index' %}" class="btn btn-ghost text-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 512 512" class="theme-logo">
+              <path d="M29.805 29.777L242.14 209.55H118.712l112.54 86.784H95.995l225.656 174.012-81.537-116.05 66.487.143 179.185 138.175-171.96-244.746h84.568L248.082 29.776H29.805z"/>
+            </svg>
+            HyperDjangoKit
+          </a>
+        </div>
 
-            <div class="flex gap-2">
-              <!-- Theme Toggle -->
-              <label class="swap swap-rotate">
-                <input type="checkbox" data-theme-control="toggle" class="theme-controller" value="dark" />
+        <div class="flex gap-2">
+          <!-- Theme Toggle -->
+          <label class="swap swap-rotate">
+            <input type="checkbox" data-theme-control="toggle" class="theme-controller" value="dark" />
 
-                <!-- sun icon -->
-                <svg class="swap-off h-8 w-8 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
-                </svg>
+            <!-- sun icon -->
+            <svg class="swap-off h-8 w-8 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+            </svg>
 
-                <!-- moon icon -->
-                <svg class="swap-on h-6 w-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
-                </svg>
-              </label>
+            <!-- moon icon -->
+            <svg class="swap-on h-6 w-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
+            </svg>
+          </label>
 
-              {% if request.user.is_authenticated %}
-              <!-- Shopping Cart -->
-              <a href="{% url 'shop:view_basket' %}" class="btn btn-ghost btn-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                </svg>
-              </a>
+          {% if request.user.is_authenticated %}
+          <!-- Shopping Cart -->
+          <a href="{% url 'shop:view_basket' %}" class="btn btn-ghost btn-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+            </svg>
+          </a>
 
-              <!-- User Profile Drawer -->
-                <div class="drawer drawer-end">
-                  <input
-                      id="topbar-profile-drawer"
-                      type="checkbox"
-                      class="drawer-toggle" />
-                  <div class="drawer-content">
-                    <label
-                        for="topbar-profile-drawer"
-                        class="btn btn-ghost btn-circle">
-                      <div class="avatar">
-                        <div class="w-8 rounded-full">
-                          {% if user.profile_image %}
-                            <img src="{{ user.profile_image.url }}" alt="{{ user.get_full_name|default:user.username }}" />
-                          {% else %}
-                            <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" alt="Default Avatar" />
-                          {% endif %}
-                        </div>
-                      </div>
-                    </label>
+          <!-- User Profile Drawer -->
+            <div class="drawer drawer-end">
+              <input
+                  id="topbar-profile-drawer"
+                  type="checkbox"
+                  class="drawer-toggle" />
+              <div class="drawer-content">
+                <label
+                    for="topbar-profile-drawer"
+                    class="btn btn-ghost btn-circle">
+                  <div class="avatar">
+                    <div class="w-8 rounded-full">
+                      {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" alt="{{ user.get_full_name|default:user.username }}" />
+                      {% else %}
+                        <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" alt="Default Avatar" />
+                      {% endif %}
+                    </div>
                   </div>
-                  <div class="drawer-side z-50">
-                    <label
-                        for="topbar-profile-drawer"
-                        aria-label="close sidebar"
-                        class="drawer-overlay"></label>
-                    <div class="h-full w-72 p-2 sm:w-84">
-                      <div class="bg-base-100 rounded-box relative flex h-full flex-col pt-4 sm:pt-8">
-                        <div class="flex flex-col items-center">
-                          <div class="relative">
-                            <div class="avatar">
-                              <div class="size-20 md:size-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                {% if user.profile_image %}
-                                  <img src="{{ user.profile_image.url }}" alt="{{ user.get_full_name|default:user.username }}" />
-                                {% else %}
-                                  <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" alt="Default Avatar" />
-                                {% endif %}
-                              </div>
-                            </div>
+                </label>
+              </div>
+              <div class="drawer-side z-50">
+                <label
+                    for="topbar-profile-drawer"
+                    aria-label="close sidebar"
+                    class="drawer-overlay"></label>
+                <div class="h-full w-72 p-2 sm:w-84">
+                  <div class="bg-base-100 rounded-box relative flex h-full flex-col pt-4 sm:pt-8">
+                    <div class="flex flex-col items-center">
+                      <div class="relative">
+                        <div class="avatar">
+                          <div class="size-20 md:size-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                            {% if user.profile_image %}
+                              <img src="{{ user.profile_image.url }}" alt="{{ user.get_full_name|default:user.username }}" />
+                            {% else %}
+                              <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" alt="Default Avatar" />
+                            {% endif %}
                           </div>
-                          <p class="mt-4 text-lg/none font-medium sm:mt-8">
-                            {{ user.get_full_name|default:user.username }}
-                          </p>
-                          <p class="text-base-content/60 mt-1 text-sm">
-                            {{ user.email }}
-                          </p>
-                        </div>
-                        <div class="border-base-300 mt-4 grow overflow-auto border-t border-dashed px-2 sm:mt-6">
-                          <ul class="menu w-full p-2">
-                            <li class="menu-title">Account</li>
-                            <li>
-                              <a href="{% url 'user_dashboard:account_profile' %}">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                                </svg>
-                                <span>View Profile</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a href="{% url 'user_dashboard:subscription_management' %}">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                                </svg>
-                                <span>Subscription</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a href="{% url 'user_dashboard:subscription_invoices' %}">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
-                                </svg>
-                                <span>Billing</span>
-                              </a>
-                            </li>
-                            <li>
-                              <a class="text-error hover:bg-error/10"
-                                 href="{% url 'account_logout' %}">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-                                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3h12.5" />
-                                </svg>
-                                <span>Sign Out</span>
-                              </a>
-                            </li>
-                          </ul>
                         </div>
                       </div>
+                      <p class="mt-4 text-lg/none font-medium sm:mt-8">
+                        {{ user.get_full_name|default:user.username }}
+                      </p>
+                      <p class="text-base-content/60 mt-1 text-sm">
+                        {{ user.email }}
+                      </p>
+                    </div>
+                    <div class="border-base-300 mt-4 grow overflow-auto border-t border-dashed px-2 sm:mt-6">
+                      <ul class="menu w-full p-2">
+                        <li class="menu-title">{% trans "Account" %}</li>
+                        <li>
+                          <a href="{% url 'user_dashboard:account_profile' %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                            </svg>
+                            <span>{% trans "View Profile" %}</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="{% url 'user_dashboard:subscription_management' %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                            </svg>
+                            <span>{% trans "Subscription" %}</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="{% url 'user_dashboard:subscription_invoices' %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                            </svg>
+                            <span>{% trans "Billing" %}</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a class="text-error hover:bg-error/10"
+                             href="{% url 'account_logout' %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3h12.5" />
+                            </svg>
+                            <span>{% trans "Sign Out" %}</span>
+                          </a>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
-              {% else %}
-              <a href="{% url 'account_login' %}" class="btn btn-ghost btn-sm">
-                Login
-              </a>
-              {% endif %}
+              </div>
             </div>
-          </div>
-
-          {% block content %}{% endblock content %}
-          
-          <footer class="footer sm:footer-horizontal bg-base-200 text-base-content p-10">
-            <aside>
-              <p class="font-title text-2xl font-bold">HyperDjangoKit</p>
-              <p class="font-body">Django SaaS Starter Kit<br/>Built for speed and maintainability since 2024</p>
-            </aside>
-            <nav>
-              <h6 class="footer-title font-title">Product</h6>
-              <a class="link link-hover font-body" href="#features">Features</a>
-              <a class="link link-hover font-body" href="#pricing">Pricing</a>
-              <a class="link link-hover font-body" href="#docs">Documentation</a>
-              <a class="link link-hover font-body" href="#changelog">Changelog</a>
-            </nav>
-            <nav>
-              <h6 class="footer-title font-title">Company</h6>
-              <a class="link link-hover font-body" href="#about">About us</a>
-              <a class="link link-hover font-body" href="#contact">Contact</a>
-              <a class="link link-hover font-body" href="#blog">Blog</a>
-            </nav>
-            <nav>
-              <h6 class="footer-title font-title">Legal</h6>
-              <a class="link link-hover font-body" href="#terms">Terms of use</a>
-              <a class="link link-hover font-body" href="#privacy">Privacy policy</a>
-              <a class="link link-hover font-body" href="#cookies">Cookie policy</a>
-            </nav>
-          </footer>
+          {% else %}
+          <a href="{% url 'account_login' %}" class="btn btn-ghost btn-sm">
+            {% trans "Login" %}
+          </a>
+          {% endif %}
         </div>
       </div>
 
-      <!--  Start: Layout - Rightbar Component -->
-      <div class="drawer drawer-end">
-        <input id="layout-rightbar-drawer" class="drawer-toggle" type="checkbox" />
-        <div class="drawer-side z-[50]">
-          <label for="layout-rightbar-drawer" class="drawer-overlay"></label>
-          <div class="bg-base-100 text-base-content h-full w-72 sm:w-96">
-            {% include 'shop/products/product_filter_content.html' %}
-          </div>
-        </div>
-      </div>
-      <!--  End: Layout - Rightbar Component -->
+      {% block content %}{% endblock content %}
+
+      <footer class="footer sm:footer-horizontal bg-base-200 text-base-content p-10">
+        <aside>
+          <p class="font-title text-2xl font-bold">HyperDjangoKit</p>
+          <p class="font-body">{% trans "Django SaaS Starter Kit" %}<br/>{% trans "Built for speed and maintainability since 2024" %}</p>
+        </aside>
+        <nav>
+          <h6 class="footer-title font-title">{% trans "Product" %}</h6>
+          <a class="link link-hover font-body" href="#features">{% trans "Features" %}</a>
+          <a class="link link-hover font-body" href="#pricing">{% trans "Pricing" %}</a>
+          <a class="link link-hover font-body" href="#docs">{% trans "Documentation" %}</a>
+          <a class="link link-hover font-body" href="#changelog">{% trans "Changelog" %}</a>
+        </nav>
+        <nav>
+          <h6 class="footer-title font-title">{% trans "Company" %}</h6>
+          <a class="link link-hover font-body" href="#about">{% trans "About us" %}</a>
+          <a class="link link-hover font-body" href="#contact">{% trans "Contact" %}</a>
+          <a class="link link-hover font-body" href="#blog">{% trans "Blog" %}</a>
+        </nav>
+        <nav>
+          <h6 class="footer-title font-title">{% trans "Legal" %}</h6>
+          <a class="link link-hover font-body" href="#terms">{% trans "Terms of use" %}</a>
+          <a class="link link-hover font-body" href="#privacy">{% trans "Privacy policy" %}</a>
+          <a class="link link-hover font-body" href="#cookies">{% trans "Cookie policy" %}</a>
+        </nav>
+      </footer>
     </div>
-    <!--  End: Layout - Main -->
-    <script src="{% static 'js/app.js' %}"></script>
-    <script src="{% static 'js/toast.js' %}"></script>
-    {% block js_body %}{% endblock js_body %}
-  </body>
-</html>
+  </div>
+
+  <!--  Start: Layout - Rightbar Component -->
+  <div class="drawer drawer-end">
+    <input id="layout-rightbar-drawer" class="drawer-toggle" type="checkbox" />
+    <div class="drawer-side z-[50]">
+      <label for="layout-rightbar-drawer" class="drawer-overlay"></label>
+      <div class="bg-base-100 text-base-content h-full w-72 sm:w-96">
+        {% include 'shop/products/product_filter_content.html' %}
+      </div>
+    </div>
+  </div>
+  <!--  End: Layout - Rightbar Component -->
+</div>
+<!--  End: Layout - Main -->
+{% endblock body %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'js/toast.js' %}"></script>
+{% block js_body %}{% endblock js_body %}
+{% endblock extra_scripts %}

@@ -1,0 +1,83 @@
+<c-vars page_obj />
+
+{% if page_obj and page_obj.paginator.num_pages > 1 %}
+<div class="flex justify-center mt-12">
+  <div class="join shadow-lg">
+    <!-- Previous Button -->
+    {% if page_obj.has_previous %}
+      <a
+        href="?page={{ page_obj.previous_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}"
+        class="join-item btn btn-md"
+        aria-label="Previous page">
+        <span class="iconify lucide--chevron-left size-5"></span>
+      </a>
+    {% else %}
+      <button class="join-item btn btn-md btn-disabled" disabled aria-label="Previous page">
+        <span class="iconify lucide--chevron-left size-5"></span>
+      </button>
+    {% endif %}
+
+    <!-- Page Number Buttons -->
+    {% with page_obj.paginator.num_pages as total_pages %}
+    {% with page_obj.number as current_page %}
+
+      {% for page_num in page_obj.paginator.page_range %}
+        <!-- Always show first page -->
+        {% if page_num == 1 %}
+          <a
+            href="?page=1{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}"
+            class="join-item btn btn-md {% if current_page == 1 %}btn-active{% endif %}"
+            aria-label="Page 1"
+            {% if current_page == 1 %}aria-current="page"{% endif %}>
+            1
+          </a>
+
+        <!-- Show ellipsis if gap between first page and current range -->
+        {% elif page_num == 2 and current_page > 4 %}
+          <button class="join-item btn btn-md btn-disabled" disabled>...</button>
+
+        <!-- Show pages around current page -->
+        {% elif page_num >= current_page|add:"-2" and page_num <= current_page|add:"2" and page_num != 1 and page_num != total_pages %}
+          <a
+            href="?page={{ page_num }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}"
+            class="join-item btn btn-md {% if page_num == current_page %}btn-active{% endif %}"
+            aria-label="Page {{ page_num }}"
+            {% if page_num == current_page %}aria-current="page"{% endif %}>
+            {{ page_num }}
+          </a>
+
+        <!-- Show ellipsis if gap between current range and last page -->
+        {% elif page_num == total_pages|add:"-1" and current_page < total_pages|add:"-3" %}
+          <button class="join-item btn btn-md btn-disabled" disabled>...</button>
+
+        <!-- Always show last page -->
+        {% elif page_num == total_pages and total_pages > 1 %}
+          <a
+            href="?page={{ total_pages }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}"
+            class="join-item btn btn-md {% if current_page == total_pages %}btn-active{% endif %}"
+            aria-label="Page {{ total_pages }}"
+            {% if current_page == total_pages %}aria-current="page"{% endif %}>
+            {{ total_pages }}
+          </a>
+        {% endif %}
+      {% endfor %}
+
+    {% endwith %}
+    {% endwith %}
+
+    <!-- Next Button -->
+    {% if page_obj.has_next %}
+      <a
+        href="?page={{ page_obj.next_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}"
+        class="join-item btn btn-md"
+        aria-label="Next page">
+        <span class="iconify lucide--chevron-right size-5"></span>
+      </a>
+    {% else %}
+      <button class="join-item btn btn-md btn-disabled" disabled aria-label="Next page">
+        <span class="iconify lucide--chevron-right size-5"></span>
+      </button>
+    {% endif %}
+  </div>
+</div>
+{% endif %}

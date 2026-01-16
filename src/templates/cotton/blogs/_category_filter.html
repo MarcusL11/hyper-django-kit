@@ -1,0 +1,68 @@
+<c-vars
+  categories
+  active_category=""
+/>
+
+<!-- Mobile Dropdown (visible on small screens) -->
+<div class="lg:hidden mb-6">
+  <div class="dropdown dropdown-bottom w-full">
+    <div tabindex="0" role="button" class="btn btn-outline w-full justify-between">
+      <span class="flex items-center gap-2">
+        <span class="iconify lucide--filter size-4"></span>
+        {% if active_category %}
+          {{ active_category.name }}
+        {% else %}
+          All Categories
+        {% endif %}
+      </span>
+      <span class="iconify lucide--chevron-down size-4"></span>
+    </div>
+    <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-full p-2 shadow-xl border border-base-300 mt-2">
+      <li>
+        <a
+          href="?page=1"
+          class="{% if not active_category %}active{% endif %}"
+          aria-current="{% if not active_category %}page{% endif %}">
+          All Categories
+          {% if not active_category %}
+            <span class="iconify lucide--check size-4 ml-auto"></span>
+          {% endif %}
+        </a>
+      </li>
+      {% for category in categories %}
+        <li>
+          <a
+            href="?category={{ category.slug }}&page=1"
+            class="{% if active_category.slug == category.slug %}active{% endif %}"
+            aria-current="{% if active_category.slug == category.slug %}page{% endif %}">
+            {{ category.name }}
+            {% if active_category.slug == category.slug %}
+              <span class="iconify lucide--check size-4 ml-auto"></span>
+            {% endif %}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<!-- Desktop Tab Navigation (visible on large screens) -->
+<div class="hidden lg:block mb-8">
+  <div class="tabs tabs-boxed bg-base-200 p-1 shadow-lg overflow-x-auto">
+    <a
+      href="?page=1"
+      class="tab flex-shrink-0 {% if not active_category %}tab-active{% endif %}"
+      aria-current="{% if not active_category %}page{% endif %}">
+      <span class="iconify lucide--grid-3x3 size-4 mr-2"></span>
+      All Categories
+    </a>
+    {% for category in categories %}
+      <a
+        href="?category={{ category.slug }}&page=1"
+        class="tab flex-shrink-0 {% if active_category.slug == category.slug %}tab-active{% endif %}"
+        aria-current="{% if active_category.slug == category.slug %}page{% endif %}">
+        {{ category.name }}
+      </a>
+    {% endfor %}
+  </div>
+</div>

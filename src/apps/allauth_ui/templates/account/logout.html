@@ -3,15 +3,15 @@
 
 {% block head_title %}{% trans "Sign Out" %}{% endblock %}
 
-{% block body %}
+{% block auth_body %}
 <div class="space-y-8">
-  {# Header #}
+  <!-- Header -->
   <div class="text-center space-y-2">
     <h1 class="text-3xl md:text-4xl font-bold font-title">{% trans "Sign Out?" %}</h1>
     <p class="text-base-content/70 font-body">{% trans "Are you sure you want to sign out of your account?" %}</p>
   </div>
 
-  {# Confirmation Form #}
+  <!-- Confirmation Form -->
   <form method="post" action="{% url 'account_logout' %}" class="space-y-4">
     {% csrf_token %}
     {{ redirect_field }}
@@ -26,4 +26,4 @@
     </div>
   </form>
 </div>
-{% endblock body %}
+{% endblock auth_body %}

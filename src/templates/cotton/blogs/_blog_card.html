@@ -1,0 +1,85 @@
+<c-vars
+  post
+  featured="False"
+  show_author="True"
+/>
+
+<article
+  class="card lg:card-side bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 border border-base-300 group h-full overflow-hidden"
+  aria-label="Blog post: {{ post.title }}"
+>
+
+  <!-- Image Section with Category Badges Overlay -->
+  {% if post.featured_image %}
+  <figure class="relative aspect-4/3 lg:aspect-auto lg:w-2/5 overflow-hidden bg-base-200">
+    <img
+      src="{{ post.featured_image.url }}"
+      alt="{{ post.title }}"
+      class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+      loading="lazy"
+    />
+
+    <!-- Category Badges Overlay (Top-Left, Max 2 categories, truncated to prevent overflow) -->
+    {% if post.categories.all %}
+    <div class="absolute top-3 left-3 flex flex-wrap gap-2 max-w-[calc(100%-1.5rem)]">
+      {% for category in post.categories.all|slice:":2" %}
+        <span class="badge badge-secondary badge-sm font-body shadow-lg truncate max-w-[120px]">{{ category.name|truncatewords:2 }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </figure>
+  {% endif %}
+
+  <!-- Content Section -->
+  <div class="card-body flex flex-col grow p-4 lg:p-6 lg:w-3/5">
+
+    <!-- Date with Calendar Icon -->
+    {% if post.date %}
+    <div class="flex items-center gap-1.5 text-base-content text-sm font-body mb-2">
+      <span class="iconify lucide--calendar size-4"></span>
+      <time datetime="{{ post.date|date:'Y-m-d' }}">
+        {{ post.date|date:"M d, Y" }}
+      </time>
+    </div>
+    {% endif %}
+
+    <!-- Title -->
+    <h3 class="font-heading text-lg lg:text-xl group-hover:text-primary transition-colors line-clamp-2 mb-3">
+      <a href="{% url 'blogs:blog_detail' slug=post.slug %}" class="hover:underline decoration-2 underline-offset-2">
+        {{ post.title }}
+      </a>
+    </h3>
+
+    <!-- Summary/Excerpt -->
+    {% if post.summary %}
+    <p class="text-base-content font-body text-sm line-clamp-2 lg:line-clamp-3 mb-4 flex-grow">
+      {{ post.summary }}
+    </p>
+    {% endif %}
+
+    <!-- Footer: Author and Read Button -->
+    <div class="card-actions items-center mt-auto pt-4 border-t border-base-300">
+      {% if show_author and post.author %}
+      <div class="flex items-center gap-2.5">
+        <div class="avatar placeholder">
+          <div class="bg-primary text-primary-content w-9 h-9 rounded-full">
+            <span class="text-xs font-medium">{{ post.author.get_full_name|default:post.author.username|slice:":1"|upper }}</span>
+          </div>
+        </div>
+        <div class="text-sm">
+          <p class="font-medium text-base-content font-body">{{ post.author.get_full_name|default:post.author.username }}</p>
+        </div>
+      </div>
+      {% endif %}
+
+      <a
+        href="{% url 'blogs:blog_detail' slug=post.slug %}"
+        class="btn btn-primary btn-sm gap-1.5 ml-auto"
+        aria-label="Read article: {{ post.title }}"
+      >
+        "Read"
+        <span class="iconify lucide--arrow-right size-4"></span>
+      </a>
+    </div>
+  </div>
+</article>

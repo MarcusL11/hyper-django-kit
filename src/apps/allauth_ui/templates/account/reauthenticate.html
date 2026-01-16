@@ -6,7 +6,7 @@
   {% csrf_token %}
   {{ redirect_field }}
 
-  {# Non-field errors #}
+  <!-- Non-field errors -->
   {% for error in form.non_field_errors %}
     <div role="alert" class="alert alert-error">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -18,7 +18,7 @@
 
   <p class="text-base-content/70 font-body">{% trans "Enter your password:" %}</p>
 
-  {# Password Field #}
+  <!-- Password Field -->
   <fieldset class="fieldset">
     <label class="input input-lg w-full">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-[1em] opacity-50">
@@ -36,7 +36,7 @@
     {% endif %}
   </fieldset>
 
-  {# Submit Button #}
+  <!-- Submit Button -->
   <button type="submit" class="btn btn-primary btn-lg btn-block font-body">
     {% trans "Confirm" %}
   </button>

@@ -2,7 +2,7 @@
 {% load humanize pricing_filters %}
 
 {% block content %}
-    {# Header Section with Invoice Buttons #}
+    <!-- Header Section with Invoice Buttons -->
     <div class="card card-border bg-base-300 rounded-box relative w-full overflow-hidden p-6 shrink-0">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -25,7 +25,7 @@
           </p>
         </div>
 
-        {# Receipt Button #}
+        <!-- Receipt Button -->
         {% if order.receipt %}
           <div class="inline-flex gap-2">
             <a href="{{ order.receipt.receipt_url }}"
@@ -47,12 +47,12 @@
       </svg>
     </div>
 
-    {# Products Table #}
+    <!-- Products Table -->
     <div class="card card-border bg-base-200 shadow-xl flex-1 flex flex-col min-h-0">
       <div class="card-body grow-0 shrink-0">
         <h2 class="card-title">Products in this Order</h2>
         <p class="text-sm text-base-content/70">Items purchased in this order</p>
-        {# TODO: Simple details Order Summary #}
+        <!-- TODO: Simple details Order Summary -->
       </div>
       {% if products %}
         <div class="flex-1 overflow-auto min-h-0">

@@ -3,20 +3,20 @@
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
-{% block body %}
+{% block auth_body %}
 <div class="space-y-8">
-  {# Header #}
+  <!-- Header -->
   <div class="text-center space-y-2">
     <h1 class="text-3xl md:text-4xl font-bold font-title">{% trans "Welcome Back" %}</h1>
     <p class="text-base-content/70 font-body">{% trans "Sign in to your account" %}</p>
   </div>
 
-  {# Form #}
+  <!-- Form -->
   {% if not SOCIALACCOUNT_ONLY %}
     <form method="post" action="{% url 'account_login' %}" class="space-y-6">
       {% csrf_token %}
 
-      {# Non-field errors #}
+      <!-- Non-field errors -->
       {% for error in form.non_field_errors %}
         <div role="alert" class="alert alert-error">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -26,7 +26,7 @@
         </div>
       {% endfor %}
 
-      {# Email/Username Field #}
+      <!-- Email/Username Field -->
       <fieldset class="fieldset">
         <label class="input input-lg w-full">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-[1em] opacity-50">
@@ -45,7 +45,7 @@
         {% endif %}
       </fieldset>
 
-      {# Password Field #}
+      <!-- Password Field -->
       <fieldset class="fieldset">
         <label class="input input-lg w-full">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-[1em] opacity-50">
@@ -63,7 +63,7 @@
         {% endif %}
       </fieldset>
 
-      {# Remember me + Forgot password #}
+      <!-- Remember me + Forgot password -->
       <div class="flex items-center justify-between">
         {% if form.remember %}
           <label class="label cursor-pointer gap-2">
@@ -78,17 +78,17 @@
         </a>
       </div>
 
-      {# Hidden fields #}
+      <!-- Hidden fields -->
       {{ redirect_field }}
 
-      {# Submit Button #}
+      <!-- Submit Button -->
       <button type="submit" class="btn btn-primary btn-lg btn-block font-body">
         {% trans "Sign In" %}
       </button>
     </form>
   {% endif %}
 
-  {# Login by code option #}
+  <!-- Login by code option -->
   {% if LOGIN_BY_CODE_ENABLED %}
     <div class="text-center">
       <a href="{{ request_login_code_url }}" class="btn btn-outline btn-block gap-2 font-body">
@@ -100,15 +100,15 @@
     </div>
   {% endif %}
 
-  {# Divider #}
+  <!-- Divider -->
   {% if SOCIALACCOUNT_ENABLED %}
     <div class="divider font-body">{% trans "OR" %}</div>
 
-    {# Social Login #}
+    <!-- Social Login -->
     {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
   {% endif %}
 
-  {# Sign up link #}
+  <!-- Sign up link -->
   {% if not SOCIALACCOUNT_ONLY %}
     <div class="text-center text-sm font-body">
       {% trans "Don't have an account?" %}
@@ -118,4 +118,4 @@
     </div>
   {% endif %}
 </div>
-{% endblock body %}
+{% endblock auth_body %}

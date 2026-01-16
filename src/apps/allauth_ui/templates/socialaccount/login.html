@@ -9,9 +9,9 @@
   {% endif %}
 {% endblock %}
 
-{% block body %}
+{% block auth_body %}
 <div class="space-y-8">
-  {# Header #}
+  <!-- Header -->
   <div class="text-center space-y-2">
     {% if process == "connect" %}
       <h1 class="text-3xl md:text-4xl font-bold font-title">
@@ -30,7 +30,7 @@
     {% endif %}
   </div>
 
-  {# Confirmation Form #}
+  <!-- Confirmation Form -->
   <form method="post" class="space-y-6">
     {% csrf_token %}
     {{ redirect_field }}
@@ -40,11 +40,11 @@
     </button>
   </form>
 
-  {# Cancel Link #}
+  <!-- Cancel Link -->
   <div class="text-center">
     <a href="{% url 'account_login' %}" class="link link-primary font-body">
       {% trans "Cancel" %}
     </a>
   </div>
 </div>
-{% endblock body %}
+{% endblock auth_body %}
