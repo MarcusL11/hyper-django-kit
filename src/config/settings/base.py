@@ -11,7 +11,17 @@ STATIC_DIR = os.path.join(BASE_DIR.parent, "static")
 MEDIA_DIR = os.path.join(BASE_DIR.parent, "media")
 
 env = environ.Env()
-environ.Env.read_env(env_file=os.path.join(BASE_DIR, ".env"))
+
+# Load base env file (shared across all environments)
+env_base = os.path.join(BASE_DIR, ".env.base")
+if os.path.exists(env_base):
+    environ.Env.read_env(env_file=env_base)
+
+# Load environment-specific env file (overrides base values)
+environment = os.getenv("DJANGO_ENVIRONMENT", "development")
+env_specific = os.path.join(BASE_DIR, f".env.{environment}")
+if os.path.exists(env_specific):
+    environ.Env.read_env(env_file=env_specific, overwrite=True)
 
 
 sys.path.insert(0, str(BASE_DIR.parent / "apps"))
@@ -62,7 +72,9 @@ THIRD_PARTY_APPS = [
 ]
 
 
-INSTALLED_APPS = DJANGO_CORE_APPS + LOCAL_APPS + THIRD_PARTY_APPS
+INSTALLED_APPS = DJANGO_CORE_APPS + LOCAL_APPS + THIRD_PARTY_APPS + [
+    "django_cleanup.apps.CleanupConfig",  # Must be last: auto-deletes files on model/field changes
+]
 
 TAILWIND_APP_NAME = "apps.theme"
 

@@ -3,4 +3,5 @@ pytest
 pytest-django
 django-stubs
 django-debug-toolbar
+django-cleanup==9.0.0
 djlint

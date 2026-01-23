@@ -90,3 +90,7 @@
   */
 @source "../../../**/*.{html,py,js}";
 @source "../../../../templates/**/*.{html,py,js}";
+
+html {
+  scroll-behavior: smooth;
+}

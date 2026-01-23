@@ -11,8 +11,10 @@ wheels/
 *.pyo
 *.pyd
 .env
+.env.*
 ENV/
 !*.env.sample
+!*.env.*.sample
 PROMPT_TEMPLATES.md
 CLAUDE.md
 
